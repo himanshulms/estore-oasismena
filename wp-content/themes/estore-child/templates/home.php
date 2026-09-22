@@ -146,11 +146,13 @@ $shop = get_page_by_path( 'products' );
 				<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-[#0A0A0A]/30" aria-hidden="true"></div>
 			<?php endif; ?>
 
-			<div class="glow right-[12%] top-[14%]" aria-hidden="true"></div>
+			<!-- Figma 215:6704 (navy wash) and 215:6728 (white halo behind the shot) -->
+			<div class="glow glow--deal left-[40%] top-[15px]" aria-hidden="true"></div>
+			<div class="glow glow--halo left-[69%] top-[85px]" aria-hidden="true"></div>
 
 			<?php if ( $get( 'deal_product_image' ) ) : ?>
 				<img src="<?php echo esc_url( $get( 'deal_product_image' ) ); ?>" alt=""
-					class="hidden lg:block absolute right-[7%] top-1/2 -translate-y-1/2 w-[357px] max-h-[408px] object-contain"
+					class="hidden lg:block absolute left-[62%] top-1/2 -translate-y-1/2 w-[357px] max-h-[408px] object-contain"
 					aria-hidden="true" loading="lazy">
 			<?php endif; ?>
 
@@ -256,7 +258,11 @@ $shop = get_page_by_path( 'products' );
 		<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'team_eyebrow' ) ?: __( 'Our Team', 'estore-child' ) ); ?></p>
 		<h2 class="display uppercase"><?php echo esc_html( $get( 'team_heading' ) ?: __( 'Management', 'estore-child' ) ); ?></h2>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 mt-12 text-left">
+		<div class="relative mt-12">
+			<!-- Figma 215:6775: 520px lime circle at 10%, blurred, centred on the grid -->
+			<span class="glow glow--team left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></span>
+
+			<div class="relative grid grid-cols-1 md:grid-cols-2 text-left">
 			<?php foreach ( $team as $i => $member ) : ?>
 				<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
 					data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
@@ -269,7 +275,8 @@ $shop = get_page_by_path( 'products' );
 						<p class="lede mt-1"><?php echo esc_html( $member['member_role'] ?? '' ); ?></p>
 					</div>
 				</div>
-			<?php endforeach; ?>
+				<?php endforeach; ?>
+			</div>
 		</div>
 	</div>
 </section>

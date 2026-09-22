@@ -22,8 +22,6 @@ $multi = count( $slides ) > 1;
 ?>
 
 <section class="relative overflow-hidden <?php echo esc_attr( $height ); ?>">
-	<div class="glow right-[6%] top-[10%]" aria-hidden="true"></div>
-
 	<div class="swiper hero-swiper h-full"
 		data-slides-per-view="1" data-slides-tablet="1" data-slides-mobile="1"
 		data-space-between="0"
@@ -47,7 +45,16 @@ $multi = count( $slides ) > 1;
 						<img src="<?php echo esc_url( $image ); ?>" alt=""
 							class="absolute inset-y-0 right-0 w-full lg:w-[72%] h-full object-cover object-center" aria-hidden="true">
 						<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] via-[38%] to-transparent" aria-hidden="true"></div>
+
+						<!-- Figma 215:6385: a 131px band fading the photo into the page
+						     at the bottom of the hero, so the image melts out instead
+						     of ending on a hard edge. -->
+						<div class="absolute inset-x-0 bottom-0 h-[131px] bg-gradient-to-b from-transparent to-[#0A0A0A]" aria-hidden="true"></div>
 					<?php endif; ?>
+
+					<!-- Figma 215:6383: 500px, #133578 @ 8%, blur(120px). Sits over the
+					     photo and under the copy, so it goes after the gradient. -->
+					<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
 					<div class="relative shell h-full flex flex-col justify-center py-14 <?php echo $is_home ? 'lg:pt-[54px] lg:pb-20' : ''; ?>">
 						<div class="max-w-[720px]">

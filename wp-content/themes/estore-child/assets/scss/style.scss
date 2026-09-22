@@ -268,15 +268,45 @@ img {
     paint-order: stroke fill;
 }
 
-/* Hero glow: the 384px blurred circle behind the hero art in Figma. */
+/* Blurred colour washes. Figma LAYER_BLUR radius maps to CSS blur(radius / 2)
+   - verified against node 215:6704, which the Figma API itself reports as
+   blur(100px) for radius 200. Every glow on the page is listed here.
+
+   Default = the hero wash: 500px, radius 240, #133578 @ 8% (node 215:6383). */
 .glow {
     position: absolute;
-    width: 384px;
-    height: 384px;
+    width: 500px;
+    height: 500px;
     border-radius: 999px;
-    background-color: $accent-soft;
-    filter: blur(100px);
+    background-color: rgba(19, 53, 120, 0.08);
+    filter: blur(120px);
     pointer-events: none;
+
+    /* Deal band: 384px, radius 200, #133578 @ 10% (node 215:6704). */
+    &--deal {
+        width: 384px;
+        height: 384px;
+        background-color: rgba(19, 53, 120, 0.1);
+        filter: blur(100px);
+    }
+
+    /* Management band: 520px lime circle, radius 230 (node 215:6775). */
+    &--team {
+        width: 520px;
+        height: 520px;
+        background-color: rgba(202, 217, 41, 0.1);
+        filter: blur(115px);
+    }
+
+    /* White halo behind the deal band's product shot: a 296x411 rectangle,
+       radius 124, #FFFFFF @ 32% (node 215:6728). Not a circle. */
+    &--halo {
+        width: 296px;
+        height: 411px;
+        border-radius: 0;
+        background-color: rgba(255, 255, 255, 0.32);
+        filter: blur(62px);
+    }
 }
 
 /* Edge-to-edge scrolling logo strip (Figma "Marquee", 53.6px tall). */
@@ -328,8 +358,8 @@ img {
     border-bottom: 1px solid transparent;
 
     &.is-stuck {
-        background-color: rgba(10, 10, 10, 0.86);
-        backdrop-filter: blur(12px);
+        background-color: rgba(10, 10, 10, 0.92);
+        backdrop-filter: blur(24px); // Figma BACKGROUND_BLUR radius 48
         border-bottom-color: $line-soft;
     }
 }

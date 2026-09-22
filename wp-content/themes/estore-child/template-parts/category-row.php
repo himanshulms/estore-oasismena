@@ -42,7 +42,7 @@ $products = new WP_Query( array(
 		<?php endif; ?>
 
 		<?php if ( $badge ) : ?>
-			<span class="absolute top-6 right-6 px-3.5 py-1 rounded-full border border-white/30 bg-black/35 backdrop-blur text-[9px] tracking-[0.12em] uppercase">
+			<span class="absolute top-6 right-6 px-3.5 py-1 rounded-full border border-white/30 bg-white/[0.15] backdrop-blur-md text-[9px] tracking-[0.12em] uppercase">
 				<?php echo esc_html( $badge ); ?>
 			</span>
 		<?php endif; ?>
