@@ -26,8 +26,8 @@ $contact     = get_page_by_path( 'contact' );
 
 			<div class="flex items-center gap-6 shrink-0">
 				<div class="text-right">
-					<p class="font-semibold"><?php esc_html_e( "Let's Work Together", 'estore-child' ); ?></p>
-					<p class="text-sm text-muted"><?php esc_html_e( 'Get in touch with our team', 'estore-child' ); ?></p>
+					<p class="text-sm font-semibold leading-5"><?php esc_html_e( "Let's Work Together", 'estore-child' ); ?></p>
+					<p class="text-xs text-muted mt-1"><?php esc_html_e( 'Get in touch with our team', 'estore-child' ); ?></p>
 				</div>
 				<a href="<?php echo esc_url( $contact ? get_permalink( $contact ) : home_url( '/contact/' ) ); ?>" class="btn btn--primary">
 					<?php esc_html_e( 'Contact us', 'estore-child' ); ?>
@@ -40,7 +40,7 @@ $contact     = get_page_by_path( 'contact' );
 			</div>
 		</div>
 
-		<div class="mt-10 pt-12 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+		<div class="mt-12 pt-12 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
 
 			<div class="max-w-xs">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inline-flex items-center mb-5">
@@ -52,10 +52,10 @@ $contact     = get_page_by_path( 'contact' );
 				</a>
 
 				<?php if ( $footer_desc ) : ?>
-					<p class="text-muted text-sm leading-relaxed"><?php echo esc_html( $footer_desc ); ?></p>
+					<p class="text-muted text-sm font-medium leading-[23px]"><?php echo esc_html( $footer_desc ); ?></p>
 				<?php endif; ?>
 
-				<ul class="flex flex-col gap-3 mt-6 text-sm text-muted">
+				<ul class="flex flex-col gap-3 mt-7 text-sm font-medium text-muted">
 					<?php if ( $phone ) : ?>
 						<li class="flex items-center gap-3">
 							<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
@@ -76,7 +76,7 @@ $contact     = get_page_by_path( 'contact' );
 			</div>
 
 			<div>
-				<h2 class="text-xs font-semibold tracking-[0.12em] uppercase mb-5"><?php esc_html_e( 'Get Involved', 'estore-child' ); ?></h2>
+				<h2 class="text-xs font-semibold mb-5"><?php esc_html_e( 'Get Involved', 'estore-child' ); ?></h2>
 				<?php
 				wp_nav_menu( array(
 					'theme_location' => 'footer_menu',
@@ -89,7 +89,7 @@ $contact     = get_page_by_path( 'contact' );
 			</div>
 
 			<div>
-				<h2 class="text-xs font-semibold tracking-[0.12em] uppercase mb-5"><?php esc_html_e( 'Privacy Policy', 'estore-child' ); ?></h2>
+				<h2 class="text-xs font-semibold mb-5"><?php esc_html_e( 'Privacy Policy', 'estore-child' ); ?></h2>
 				<?php
 				wp_nav_menu( array(
 					'theme_location' => 'legal_menu',
@@ -102,7 +102,7 @@ $contact     = get_page_by_path( 'contact' );
 			</div>
 
 			<div>
-				<h2 class="text-xs font-semibold tracking-[0.12em] uppercase mb-5"><?php esc_html_e( 'Quick Links', 'estore-child' ); ?></h2>
+				<h2 class="text-xs font-semibold mb-5"><?php esc_html_e( 'Quick Links', 'estore-child' ); ?></h2>
 				<?php
 				// The design lists the product categories here.
 				$cats = get_terms( array( 'taxonomy' => 'product-category', 'hide_empty' => false, 'number' => 5 ) );
@@ -115,9 +115,20 @@ $contact     = get_page_by_path( 'contact' );
 					</ul>
 				<?php endif; ?>
 
+				<h2 class="text-xs font-semibold mt-8 mb-4"><?php esc_html_e( 'Newsletter Subscribe', 'estore-child' ); ?></h2>
 				<?php if ( shortcode_exists( 'contact-form-7' ) && get_theme_mod( 'newsletter_form_id' ) ) : ?>
-					<h2 class="text-xs font-semibold tracking-[0.12em] uppercase mt-8 mb-4"><?php esc_html_e( 'Newsletter Subscribe', 'estore-child' ); ?></h2>
 					<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( get_theme_mod( 'newsletter_form_id' ) ) . '"]' ); ?>
+				<?php else : ?>
+					<form class="flex" action="<?php echo esc_url( $contact ? get_permalink( $contact ) : home_url( '/contact/' ) ); ?>" method="get">
+						<label for="newsletter-email" class="sr-only"><?php esc_html_e( 'Email address', 'estore-child' ); ?></label>
+						<input type="email" name="email" id="newsletter-email" class="field" placeholder="email@example.com" required>
+						<button type="submit" class="bg-accent hover:bg-[#1b4699] transition-colors px-4 rounded-r-lg shrink-0"
+							aria-label="<?php esc_attr_e( 'Subscribe', 'estore-child' ); ?>">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+							</svg>
+						</button>
+					</form>
 				<?php endif; ?>
 			</div>
 		</div>

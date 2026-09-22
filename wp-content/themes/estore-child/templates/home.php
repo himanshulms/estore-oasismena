@@ -22,9 +22,9 @@ $get = function ( $key ) {
 <section class="shell">
 	<dl class="grid grid-cols-2 lg:grid-cols-4 border-t border-b border-white/10">
 		<?php foreach ( $stats as $i => $stat ) : ?>
-			<div class="px-6 py-7 <?php echo $i ? 'lg:border-l border-white/10' : ''; ?>">
-				<dd class="text-3xl lg:text-[40px] font-semibold tracking-tight"><?php echo esc_html( $stat['stat_value'] ?? '' ); ?></dd>
-				<dt class="text-xs tracking-[0.12em] uppercase text-muted mt-1"><?php echo esc_html( $stat['stat_label'] ?? '' ); ?></dt>
+			<div class="py-6 <?php echo $i ? 'lg:border-l border-white/10 lg:pl-8' : ''; ?>">
+				<dd class="text-[36px] font-bold leading-9 tracking-tight"><?php echo esc_html( $stat['stat_value'] ?? '' ); ?></dd>
+				<dt class="text-xs text-muted mt-2 uppercase tracking-[0.06em]"><?php echo esc_html( $stat['stat_label'] ?? '' ); ?></dt>
 			</div>
 		<?php endforeach; ?>
 	</dl>
@@ -57,14 +57,14 @@ $cats = get_terms( array(
 ) );
 ?>
 <?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
-<section class="py-20 lg:py-[100px]">
+<section class="py-14 lg:py-[60px]">
 	<div class="shell">
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
-			<div class="lg:col-span-7">
+			<div class="lg:col-span-6">
 				<?php if ( $get( 'categories_eyebrow' ) ) : ?>
-					<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'categories_eyebrow' ) ); ?></p>
+					<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'categories_eyebrow' ) ); ?></p>
 				<?php endif; ?>
-				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'categories_heading' ) ?: __( 'Explore Categories', 'estore-child' ) ); ?></h2>
+				<h2 class="display uppercase max-w-[460px]"><?php echo wp_kses_post( $get( 'categories_heading' ) ?: __( 'Explore Categories', 'estore-child' ) ); ?></h2>
 			</div>
 			<?php if ( $get( 'categories_description' ) ) : ?>
 				<div class="lg:col-span-4 lg:col-start-9">
@@ -73,7 +73,7 @@ $cats = get_terms( array(
 			<?php endif; ?>
 		</div>
 
-		<div class="rounded-[16px] overflow-hidden border border-white/[0.06]">
+		<div class="overflow-hidden divide-y divide-white/[0.06] border-y border-white/[0.06]">
 			<?php foreach ( $cats as $i => $term ) : ?>
 				<?php get_template_part( 'template-parts/category-row', null, array( 'term' => $term, 'index' => $i ) ); ?>
 			<?php endforeach; ?>
@@ -105,11 +105,11 @@ if ( ! $top->have_posts() ) {
 $shop = get_page_by_path( 'products' );
 ?>
 <?php if ( $top->have_posts() ) : ?>
-<section class="py-20 lg:py-[100px]">
+<section class="py-14 lg:py-[60px]">
 	<div class="shell">
 		<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
 			<div>
-				<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'top_rated_eyebrow' ) ?: __( 'Best Performers', 'estore-child' ) ); ?></p>
+				<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'top_rated_eyebrow' ) ?: __( 'Best Performers', 'estore-child' ) ); ?></p>
 				<h2 class="display uppercase"><?php echo esc_html( $get( 'top_rated_heading' ) ?: __( 'Top Rated', 'estore-child' ) ); ?></h2>
 			</div>
 			<a href="<?php echo esc_url( $shop ? get_permalink( $shop ) : home_url( '/products/' ) ); ?>" class="btn btn--ghost shrink-0">
@@ -120,7 +120,7 @@ $shop = get_page_by_path( 'products' );
 			</a>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
 			<?php while ( $top->have_posts() ) : ?>
 				<?php $top->the_post(); ?>
 				<?php get_template_part( 'template-parts/product-card' ); ?>
@@ -133,9 +133,12 @@ $shop = get_page_by_path( 'products' );
 
 <?php /* --- Deal band --- */ ?>
 <?php if ( $get( 'deal_heading' ) ) : ?>
-<section class="py-10 lg:py-16">
-	<div class="shell">
-		<div class="relative overflow-hidden rounded-[24px] bg-panel border border-white/[0.06] min-h-[420px] lg:min-h-[542px] flex items-center">
+<!-- Figma: the deal band is full-bleed (x=0, w=1440, h=543, r=24) with a
+     661px text column sitting on the page's 100px gutter - it is NOT inside
+     the 1240px content shell. -->
+<section class="py-10 lg:py-14">
+	<div class="px-0">
+		<div class="relative overflow-hidden rounded-[24px] bg-panel border border-white/[0.06] min-h-[400px] lg:min-h-[543px] flex items-center">
 
 			<?php if ( $get( 'deal_image' ) ) : ?>
 				<img src="<?php echo esc_url( $get( 'deal_image' ) ); ?>" alt=""
@@ -145,7 +148,13 @@ $shop = get_page_by_path( 'products' );
 
 			<div class="glow right-[12%] top-[14%]" aria-hidden="true"></div>
 
-			<div class="relative px-8 lg:px-[72px] py-16 max-w-[661px]" data-aos="fade-up">
+			<?php if ( $get( 'deal_product_image' ) ) : ?>
+				<img src="<?php echo esc_url( $get( 'deal_product_image' ) ); ?>" alt=""
+					class="hidden lg:block absolute right-[7%] top-1/2 -translate-y-1/2 w-[357px] max-h-[408px] object-contain"
+					aria-hidden="true" loading="lazy">
+			<?php endif; ?>
+
+			<div class="relative px-6 lg:pl-[100px] lg:pr-8 py-14 w-full lg:max-w-[761px]" data-aos="fade-up">
 				<div class="flex items-center gap-3 mb-7">
 					<?php if ( $get( 'deal_badge' ) ) : ?>
 						<span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#3A1416] border border-[#E84B50]/40 text-[11px] font-semibold tracking-[0.12em] uppercase text-[#E84B50]">
@@ -158,10 +167,10 @@ $shop = get_page_by_path( 'products' );
 					<?php endif; ?>
 				</div>
 
-				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'deal_heading' ) ); ?></h2>
+				<h2 class="display uppercase lg:max-w-[661px]"><?php echo wp_kses_post( $get( 'deal_heading' ) ); ?></h2>
 
 				<?php if ( $get( 'deal_text' ) ) : ?>
-					<p class="lede mt-5 text-base"><?php echo wp_kses_post( $get( 'deal_text' ) ); ?></p>
+					<p class="lede mt-6 max-w-[520px]"><?php echo wp_kses_post( $get( 'deal_text' ) ); ?></p>
 				<?php endif; ?>
 
 				<div class="flex flex-wrap items-center gap-3 mt-8">
@@ -193,11 +202,11 @@ $shop = get_page_by_path( 'products' );
 <?php /* --- Who we are: vision / mission / values --- */ ?>
 <?php $pillars = (array) $get( 'pillars' ); ?>
 <?php if ( $get( 'about_heading' ) || $pillars ) : ?>
-<section class="py-20 lg:py-[100px]">
+<section class="py-14 lg:py-[60px]">
 	<div class="shell">
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
 			<div class="lg:col-span-7">
-				<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'about_eyebrow' ) ?: __( 'Who We Are', 'estore-child' ) ); ?></p>
+				<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'about_eyebrow' ) ?: __( 'Who We Are', 'estore-child' ) ); ?></p>
 				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'about_heading' ) ); ?></h2>
 			</div>
 			<?php if ( $get( 'about_description' ) ) : ?>
@@ -208,19 +217,29 @@ $shop = get_page_by_path( 'products' );
 		</div>
 
 		<?php if ( $pillars ) : ?>
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 mt-12 pt-12 border-t border-white/10">
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 mt-10 pt-10 border-t border-white/10">
 				<?php foreach ( $pillars as $i => $pillar ) : ?>
 					<div data-aos="fade-up" data-aos-delay="<?php echo esc_attr( $i * 80 ); ?>">
-						<div class="flex items-start justify-between gap-4">
-							<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
-								<span class="w-11 h-11 grid place-items-center rounded-xl bg-accent/25 border border-accent/40">
-									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-5 h-5" aria-hidden="true">
-								</span>
-							<?php endif; ?>
+						<div class="flex items-center justify-between gap-4">
+							<span class="w-10 h-10 grid place-items-center rounded-[10px] bg-accent/30 border border-accent/50 shrink-0">
+								<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
+									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-4 h-4" aria-hidden="true">
+								<?php else : ?>
+									<svg class="w-4 h-4 text-accent-icon" style="color:#4d7ae0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+										<?php if ( 0 === $i ) : ?>
+											<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" /><circle cx="12" cy="12" r="2.5" />
+										<?php elseif ( 1 === $i ) : ?>
+											<circle cx="12" cy="12" r="8.5" /><path stroke-linecap="round" d="M12 7.5V12l3 2" />
+										<?php else : ?>
+											<path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3z" />
+										<?php endif; ?>
+									</svg>
+								<?php endif; ?>
+							</span>
 							<span class="ghost-number" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
 						</div>
-						<h3 class="text-xl font-semibold mt-6 mb-3"><?php echo esc_html( $pillar['pillar_title'] ?? '' ); ?></h3>
-						<p class="text-sm text-muted leading-relaxed"><?php echo esc_html( $pillar['pillar_text'] ?? '' ); ?></p>
+						<h3 class="text-xl font-bold leading-8 mt-6 mb-2.5"><?php echo esc_html( $pillar['pillar_title'] ?? '' ); ?></h3>
+						<p class="lede"><?php echo esc_html( $pillar['pillar_text'] ?? '' ); ?></p>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -232,22 +251,22 @@ $shop = get_page_by_path( 'products' );
 <?php /* --- Management --- */ ?>
 <?php $team = (array) $get( 'management' ); ?>
 <?php if ( $team ) : ?>
-<section class="py-20 lg:py-[100px]">
+<section class="py-14 lg:py-[60px]">
 	<div class="shell text-center">
-		<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'team_eyebrow' ) ?: __( 'Our Team', 'estore-child' ) ); ?></p>
+		<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'team_eyebrow' ) ?: __( 'Our Team', 'estore-child' ) ); ?></p>
 		<h2 class="display uppercase"><?php echo esc_html( $get( 'team_heading' ) ?: __( 'Management', 'estore-child' ) ); ?></h2>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 mt-14 text-left">
+		<div class="grid grid-cols-1 md:grid-cols-2 mt-12 text-left">
 			<?php foreach ( $team as $i => $member ) : ?>
-				<div class="flex items-center gap-6 p-8 border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r' : ''; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
+				<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
 					data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
 					<?php if ( ! empty( $member['member_photo'] ) ) : ?>
 						<img src="<?php echo esc_url( $member['member_photo'] ); ?>" alt="<?php echo esc_attr( $member['member_name'] ?? '' ); ?>"
-							class="w-28 h-28 lg:w-36 lg:h-36 rounded-full object-cover shrink-0" loading="lazy">
+							class="w-[180px] h-[180px] rounded-full object-cover shrink-0" loading="lazy">
 					<?php endif; ?>
 					<div>
-						<h3 class="text-lg font-semibold"><?php echo esc_html( $member['member_name'] ?? '' ); ?></h3>
-						<p class="text-sm text-muted mt-1"><?php echo esc_html( $member['member_role'] ?? '' ); ?></p>
+						<h3 class="text-xl font-bold leading-8"><?php echo esc_html( $member['member_name'] ?? '' ); ?></h3>
+						<p class="lede mt-1"><?php echo esc_html( $member['member_role'] ?? '' ); ?></p>
 					</div>
 				</div>
 			<?php endforeach; ?>

@@ -188,7 +188,7 @@ while ( have_posts() ) :
 			<div class="shell">
 				<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php esc_html_e( 'Product Catalogue', 'estore-child' ); ?></p>
 				<h2 class="display uppercase mb-12"><?php esc_html_e( 'Related Products', 'estore-child' ); ?></h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
 					<?php estore_render_product_grid( $term->term_id, 3, $id ); ?>
 				</div>
 			</div>

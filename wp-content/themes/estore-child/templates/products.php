@@ -15,7 +15,7 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 
 <?php get_template_part( 'template-parts/hero-banner' ); ?>
 
-<section class="py-20 lg:py-[100px]">
+<section class="py-14 lg:py-[60px]">
 	<div class="shell">
 
 		<div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
@@ -48,7 +48,7 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 			<?php endif; ?>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid" aria-live="polite" aria-busy="false">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch" id="products-grid" aria-live="polite" aria-busy="false">
 			<?php estore_render_product_grid( $current ); ?>
 		</div>
 	</div>

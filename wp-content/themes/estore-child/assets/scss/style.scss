@@ -110,23 +110,49 @@ img {
 }
 
 /* --- Type scale ------------------------------------------------------- */
+/* Sizes and line-heights are the Figma values, not approximations:
+   hero 80/110, accent word 70/110, section headings 60/76, category titles
+   30/38, card titles 20/28, body 14/23, eyebrows 10/15. */
+
+.display-hero {
+    font-size: clamp(2.75rem, #{"1.5rem + 5.6vw"}, 5rem); // 80px at 1440
+    line-height: 1.375; // 110/80
+    letter-spacing: -0.02em;
+    font-weight: 700;
+
+    .accent-word {
+        font-size: 0.875em; // 70px against an 80px parent
+        display: block;
+    }
+}
+
 .display {
-    font-size: clamp(2.5rem, #{"1.5rem + 4.2vw"}, 3.75rem); // 60px at 1440
-    line-height: 1.05;
+    font-size: clamp(2.25rem, #{"1.2rem + 4.2vw"}, 3.75rem); // 60px at 1440
+    line-height: 1.27; // 76/60
     letter-spacing: -0.02em;
     font-weight: 700;
 }
 
 .section-heading {
-    font-size: clamp(1.75rem, #{"1.2rem + 2.2vw"}, 2.25rem); // 36px at 1440
-    line-height: 1.15;
-    letter-spacing: -0.015em;
+    font-size: clamp(1.5rem, #{"1.1rem + 1.6vw"}, 1.875rem); // 30px at 1440
+    line-height: 1.27; // 38/30
+    letter-spacing: -0.01em;
     font-weight: 700;
 }
 
 .lede {
-    font-size: 0.875rem; // 14px/400 is the body size throughout the file
-    line-height: 1.6;
+    font-size: 0.875rem; // 14/23
+    line-height: 1.64;
+    color: $muted;
+}
+
+/* 10px/500, ~0.35px tracking - used above every section heading. */
+.eyebrow-text {
+    font-size: 0.625rem;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: $muted;
 }
 
@@ -184,7 +210,8 @@ img {
 
 .nav-link {
     position: relative;
-    font-size: 0.9375rem;
+    font-size: 0.875rem; // 14px/700 in the file
+    font-weight: 700;
     transition: color 0.25s ease;
 
     &::after {
@@ -224,12 +251,13 @@ img {
     white-space: nowrap;
 }
 
-/* The huge ghosted 01 / 02 / 03 behind the vision-mission-values columns. */
+/* The ghosted 01 / 02 / 03 in the vision-mission-values columns.
+   60px/700 in the file, right-aligned within each column. */
 .ghost-number {
-    font-size: clamp(3.5rem, #{"2rem + 5vw"}, 5.5rem);
+    font-size: 3.75rem;
     font-weight: 700;
-    line-height: 1;
-    color: #1a1a1a;
+    line-height: 1.07; // 64/60
+    color: #1c1c1c;
     user-select: none;
 }
 
@@ -344,6 +372,35 @@ img {
     }
 }
 
+/* Category bands: uniform 366px rows, flush against each other, each half
+   exactly 620px of the 1240px container with 36px padding in the text half. */
+.cat-row {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @media (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+        min-height: 366px;
+    }
+
+    &__media {
+        position: relative;
+        min-height: 240px;
+
+        @media (min-width: 1024px) {
+            min-height: 0;
+        }
+    }
+
+    &__body {
+        background-color: $panel;
+        padding: 28px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
 /* --- Footer ----------------------------------------------------------- */
 .site-footer {
     border-top: 1px solid $line-soft;
@@ -352,10 +409,10 @@ img {
 
 /* Oversized, barely-visible OASIS wordmark behind the footer CTA. */
 .footer-wordmark {
-    font-size: clamp(4rem, #{"2rem + 9vw"}, 8.5rem);
+    font-size: clamp(3.5rem, #{"1rem + 7vw"}, 6.25rem); // 100px at 1440
     font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 0.9;
+    letter-spacing: 0.01em;
+    line-height: 1.26; // 126/100
     color: #161616;
     user-select: none;
 }

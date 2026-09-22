@@ -12,7 +12,8 @@
  */
 $slides  = function_exists( 'cfs' ) ? (array) cfs()->get( 'hero_slider' ) : array();
 $is_home = is_front_page();
-$height  = $is_home ? 'min-h-[560px] lg:min-h-[667px]' : 'min-h-[300px] lg:min-h-[380px]';
+// Figma: the home hero runs from the 80px header to y=800 before the stats row.
+$height  = $is_home ? 'min-h-[620px] lg:min-h-[720px]' : 'min-h-[300px] lg:min-h-[380px]';
 
 if ( ! $slides ) {
 	$slides = array( array( 'slide_title' => get_the_title() ) );
@@ -44,38 +45,38 @@ $multi = count( $slides ) > 1;
 
 					<?php if ( $image ) : ?>
 						<img src="<?php echo esc_url( $image ); ?>" alt=""
-							class="absolute inset-0 w-full h-full object-cover" aria-hidden="true">
-						<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-[#0A0A0A]/20" aria-hidden="true"></div>
+							class="absolute inset-y-0 right-0 w-full lg:w-[72%] h-full object-cover object-center" aria-hidden="true">
+						<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] via-[38%] to-transparent" aria-hidden="true"></div>
 					<?php endif; ?>
 
-					<div class="relative shell h-full flex flex-col justify-center py-16 <?php echo $is_home ? 'lg:py-24' : ''; ?>">
-						<div class="max-w-[661px]">
+					<div class="relative shell h-full flex flex-col justify-center py-14 <?php echo $is_home ? 'lg:pt-[54px] lg:pb-20' : ''; ?>">
+						<div class="max-w-[720px]">
 
 							<?php if ( $eyebrow ) : ?>
-								<p class="flex items-center gap-2.5 text-xs tracking-[0.18em] uppercase text-muted mb-7" data-aos="fade-up">
+								<p class="eyebrow-text flex items-center gap-2.5 mb-[22px]" data-aos="fade-up">
 									<span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
 									<?php echo esc_html( $eyebrow ); ?>
 								</p>
 							<?php endif; ?>
 
 							<?php if ( $title || $accent ) : ?>
-								<h1 class="<?php echo $is_home ? 'display' : 'section-heading'; ?> uppercase" data-aos="fade-up" data-aos-delay="60">
+								<h1 class="<?php echo $is_home ? 'display-hero' : 'display'; ?> uppercase" data-aos="fade-up" data-aos-delay="60">
 									<?php echo esc_html( $title ); ?>
 									<?php if ( $accent ) : ?>
-										<span class="outlined block"><?php echo esc_html( $accent ); ?></span>
+										<span class="outlined accent-word"><?php echo esc_html( $accent ); ?></span>
 									<?php endif; ?>
 									<?php echo $tail ? esc_html( $tail ) : ''; ?>
 								</h1>
 							<?php endif; ?>
 
 							<?php if ( $desc ) : ?>
-								<div class="flex items-start gap-5 mt-7 max-w-md" data-aos="fade-up" data-aos-delay="120">
-									<span class="hidden sm:block w-10 h-px bg-accent mt-3 shrink-0" aria-hidden="true"></span>
-									<p class="text-muted leading-relaxed"><?php echo wp_kses_post( $desc ); ?></p>
+								<div class="flex items-start gap-6 mt-9 max-w-[500px]" data-aos="fade-up" data-aos-delay="120">
+									<span class="hidden sm:block w-10 h-px bg-accent mt-[11px] shrink-0" aria-hidden="true"></span>
+									<p class="lede"><?php echo wp_kses_post( $desc ); ?></p>
 								</div>
 							<?php endif; ?>
 
-							<div class="flex flex-wrap items-center gap-3 mt-9" data-aos="fade-up" data-aos-delay="180">
+							<div class="flex flex-wrap items-center gap-4 mt-10" data-aos="fade-up" data-aos-delay="180">
 								<?php if ( ! empty( $slide['slide_cta_label'] ) ) : ?>
 									<a href="<?php echo esc_url( $slide['slide_cta_url'] ?? '#' ); ?>" class="btn btn--primary">
 										<?php echo esc_html( $slide['slide_cta_label'] ); ?>
