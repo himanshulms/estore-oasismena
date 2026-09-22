@@ -19,7 +19,7 @@ wp-config.php
 # Build / editor artefacts
 .sass-cache/
 node_modules/
-*.css.map
+/wp-content/themes/estore-child/assets/scss/*.css.map
 .DS_Store
 .vscode/
 .idea/
