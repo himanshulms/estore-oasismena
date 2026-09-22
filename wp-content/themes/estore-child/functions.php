@@ -11,6 +11,9 @@
  * Uploads: convert JPG/PNG to WebP on upload.
  * ---------------------------------------------------------------------- */
 add_filter( 'wp_handle_upload', 'estore_convert_image_to_webp', 10, 2 );
+// Sideloads (programmatic imports, media_sideload_image) go through a different
+// filter, so register there too or imported files stay PNG/JPG.
+add_filter( 'wp_handle_sideload', 'estore_convert_image_to_webp', 10, 2 );
 function estore_convert_image_to_webp( $upload, $context ) {
 	$allowed = array( 'image/jpeg', 'image/png' );
 	if ( ! in_array( $upload['type'], $allowed, true ) || ! function_exists( 'imagewebp' ) ) {
