@@ -1,0 +1,12 @@
+/*
+Theme Name: Estore Oasis MENA
+Theme URI: http://localhost/al_shirawi/estore-oasismena
+Description: Child theme of BlankSlate for the estore.oasismena site. All project work happens here.
+Author: Al Shirawi
+Version: 1.0.0
+Template: blankslate
+Text Domain: estore-child
+*/
+
+/* Brand styles live in assets/scss/style.scss, compiled to assets/scss/style.css
+   and linked from header.php. This file exists only to declare the child theme. */

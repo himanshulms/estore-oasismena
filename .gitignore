@@ -1,0 +1,28 @@
+# WordPress - estore.oasismena
+# Core IS tracked (same convention as leminar-saudi) so the whole site can be
+# cloned and run. Only secrets, environment and generated media are ignored.
+
+# Secrets / environment
+wp-config.php
+.htaccess
+
+# Uploads and logs
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/debug.log
+*.log
+
+# Bundled example content we do not ship
+/wp-content/themes/twenty*/
+/wp-content/plugins/hello.php
+
+# Build / editor artefacts
+.sass-cache/
+node_modules/
+*.css.map
+.DS_Store
+.vscode/
+.idea/
+
+# Local Claude Code notes
+CLAUDE.md
