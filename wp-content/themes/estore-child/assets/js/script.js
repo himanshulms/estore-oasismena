@@ -13,6 +13,7 @@
         initDrawer();
         initBackToTop();
         initSwipers();
+        initGallery();
         initAOS();
     });
 
@@ -107,6 +108,26 @@
                     768: { slidesPerView: num(d.slidesTablet, num(d.slidesPerView, 2)) },
                     1024: { slidesPerView: num(d.slidesPerView, 3) }
                 }
+            });
+        });
+    }
+
+    /* Product gallery: thumbnails swap the main image in place. */
+    function initGallery() {
+        var main = document.getElementById('gallery-main');
+        var thumbs = document.querySelectorAll('.gallery-thumb');
+        if (!main || !thumbs.length) return;
+
+        thumbs.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var full = btn.dataset.full;
+                if (!full) return;
+                main.src = full;
+                thumbs.forEach(function (t) {
+                    var on = t === btn;
+                    t.setAttribute('aria-selected', on ? 'true' : 'false');
+                    t.classList.toggle('border-white/25', on);
+                });
             });
         });
     }

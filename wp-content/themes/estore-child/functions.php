@@ -58,7 +58,8 @@ add_action( 'init', function () {
 // 'main-menu' comes from the BlankSlate parent; these are ours.
 add_action( 'after_setup_theme', function () {
 	register_nav_menus( array(
-		'footer_menu' => __( 'Footer Menu', 'estore-child' ),
+		'footer_menu' => __( 'Footer Menu (Get Involved)', 'estore-child' ),
+		'legal_menu'  => __( 'Footer Menu (Privacy / Legal)', 'estore-child' ),
 		'quick_links' => __( 'Quick Links', 'estore-child' ),
 	) );
 } );
@@ -80,6 +81,8 @@ function estore_customize_register( $wp_customize ) {
 		'header_logo'        => array( 'image',    __( 'Header Logo', 'estore-child' ) ),
 		'footer_logo'        => array( 'image',    __( 'Footer Logo', 'estore-child' ) ),
 		'footer_description' => array( 'textarea', __( 'Footer Description', 'estore-child' ) ),
+		'footer_wordmark'    => array( 'text',     __( 'Footer Wordmark (large ghosted text)', 'estore-child' ) ),
+		'newsletter_form_id' => array( 'text',     __( 'Newsletter CF7 Form ID', 'estore-child' ) ),
 		'linkedin_link'      => array( 'url',      __( 'LinkedIn URL', 'estore-child' ) ),
 		'instagram_link'     => array( 'url',      __( 'Instagram URL', 'estore-child' ) ),
 		'facebook_link'      => array( 'url',      __( 'Facebook URL', 'estore-child' ) ),
@@ -143,3 +146,198 @@ class Estore_Nav_Walker extends Walker_Nav_Menu {
 		$output .= '';
 	}
 }
+
+/* -------------------------------------------------------------------------
+ * Quote requests.
+ *
+ * The design has no prices and no cart - every product CTA is "Request a
+ * Quote". That is a contact form prefilled with the product, not commerce, so
+ * there is deliberately no WooCommerce in this project.
+ * ---------------------------------------------------------------------- */
+function estore_quote_url( $product_id = 0 ) {
+	$contact = get_page_by_path( 'contact' );
+	$url     = $contact ? get_permalink( $contact ) : home_url( '/contact/' );
+
+	if ( $product_id && get_post_type( $product_id ) === 'products' ) {
+		$url = add_query_arg( 'product', rawurlencode( get_post_field( 'post_name', $product_id ) ), $url );
+	}
+
+	return $url;
+}
+
+/* -------------------------------------------------------------------------
+ * Product category term fields.
+ * CFS cannot attach fields to taxonomy terms, so the category image and badge
+ * are plain term meta with controls on the term screens (same approach as
+ * leminar-saudi, generalised).
+ * ---------------------------------------------------------------------- */
+function estore_term_fields() {
+	return array(
+		'category_image' => array( 'image', __( 'Category Image', 'estore-child' ), __( 'Used by the zig-zag band on the home page and the category hero.', 'estore-child' ) ),
+		'category_badge' => array( 'text',  __( 'Category Badge', 'estore-child' ), __( 'Small pill over the image, e.g. FEATURED. Leave blank to hide.', 'estore-child' ) ),
+	);
+}
+
+function estore_term_field_control( $key, $type, $value ) {
+	if ( 'image' === $type ) {
+		printf(
+			'<input type="hidden" name="%1$s" id="%1$s" value="%2$s" class="estore-media-value">'
+			. '<img src="%2$s" class="estore-media-preview" style="%3$smax-width:180px;height:auto;margin-bottom:8px;border:1px solid #dcdcde;padding:4px;background:#fff;">'
+			. '<button type="button" class="button estore-media-pick">%4$s</button> '
+			. '<button type="button" class="button estore-media-clear" style="%5$s">%6$s</button>',
+			esc_attr( $key ), esc_url( $value ),
+			$value ? 'display:block;' : 'display:none;',
+			esc_html__( 'Select Image', 'estore-child' ),
+			$value ? '' : 'display:none;',
+			esc_html__( 'Remove', 'estore-child' )
+		);
+		return;
+	}
+	printf( '<input type="text" name="%1$s" id="%1$s" value="%2$s" class="regular-text">', esc_attr( $key ), esc_attr( $value ) );
+}
+
+add_action( 'product-category_add_form_fields', function () {
+	foreach ( estore_term_fields() as $key => list( $type, $label, $help ) ) {
+		echo '<div class="form-field"><label for="' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label>';
+		estore_term_field_control( $key, $type, '' );
+		echo '<p>' . esc_html( $help ) . '</p></div>';
+	}
+} );
+
+add_action( 'product-category_edit_form_fields', function ( $term ) {
+	foreach ( estore_term_fields() as $key => list( $type, $label, $help ) ) {
+		echo '<tr class="form-field"><th scope="row"><label for="' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td>';
+		estore_term_field_control( $key, $type, (string) get_term_meta( $term->term_id, $key, true ) );
+		echo '<p class="description">' . esc_html( $help ) . '</p></td></tr>';
+	}
+} );
+
+add_action( 'created_product-category', 'estore_save_term_fields' );
+add_action( 'edited_product-category', 'estore_save_term_fields' );
+function estore_save_term_fields( $term_id ) {
+	if ( ! current_user_can( 'manage_categories' ) ) {
+		return;
+	}
+	foreach ( estore_term_fields() as $key => list( $type ) ) {
+		if ( ! isset( $_POST[ $key ] ) ) {
+			continue;
+		}
+		$raw = wp_unslash( $_POST[ $key ] );
+		update_term_meta( $term_id, $key, 'image' === $type ? esc_url_raw( $raw ) : sanitize_text_field( $raw ) );
+	}
+}
+
+/** Media modal for the image fields on the product-category screens. */
+add_action( 'admin_enqueue_scripts', function ( $hook ) {
+	if ( ! in_array( $hook, array( 'edit-tags.php', 'term.php' ), true ) || ( $_GET['taxonomy'] ?? '' ) !== 'product-category' ) {
+		return;
+	}
+	wp_enqueue_media();
+	wp_add_inline_script( 'jquery-core', <<<'JS'
+jQuery(function ($) {
+    $(document).on('click', '.estore-media-pick', function (e) {
+        e.preventDefault();
+        var $wrap = $(this).closest('td, .form-field');
+        var frame = wp.media({ title: 'Select Image', multiple: false, library: { type: 'image' } });
+        frame.on('select', function () {
+            var url = frame.state().get('selection').first().toJSON().url;
+            $wrap.find('.estore-media-value').val(url);
+            $wrap.find('.estore-media-preview').attr('src', url).show();
+            $wrap.find('.estore-media-clear').show();
+        });
+        frame.open();
+    });
+    $(document).on('click', '.estore-media-clear', function (e) {
+        e.preventDefault();
+        var $wrap = $(this).closest('td, .form-field');
+        $wrap.find('.estore-media-value').val('');
+        $wrap.find('.estore-media-preview').hide();
+        $(this).hide();
+    });
+});
+JS
+	);
+} );
+
+/* -------------------------------------------------------------------------
+ * Product grid + AJAX filter.
+ *
+ * One renderer shared by templates/products.php and the AJAX callback, so the
+ * initial page load and a filtered response can never drift apart.
+ * ---------------------------------------------------------------------- */
+function estore_render_product_grid( $term_id = 0, $limit = -1, $exclude = 0 ) {
+	$args = array(
+		'post_type'      => 'products',
+		'post_status'    => 'publish',
+		'posts_per_page' => $limit,
+		'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'DESC' ),
+	);
+
+	if ( $term_id ) {
+		$args['tax_query'] = array( array(
+			'taxonomy' => 'product-category',
+			'field'    => 'term_id',
+			'terms'    => (int) $term_id,
+		) );
+	}
+	if ( $exclude ) {
+		$args['post__not_in'] = array( (int) $exclude );
+	}
+
+	$q = new WP_Query( $args );
+
+	if ( ! $q->have_posts() ) {
+		echo '<p class="col-span-full text-center text-muted py-12">'
+			. esc_html__( 'No products found in this category.', 'estore-child' ) . '</p>';
+		return;
+	}
+
+	while ( $q->have_posts() ) {
+		$q->the_post();
+		get_template_part( 'template-parts/product-card' );
+	}
+	wp_reset_postdata();
+}
+
+// Registered for both logged-in and logged-out visitors - the filter is public.
+add_action( 'wp_ajax_estore_filter_products', 'estore_filter_products' );
+add_action( 'wp_ajax_nopriv_estore_filter_products', 'estore_filter_products' );
+function estore_filter_products() {
+	check_ajax_referer( 'estore_products', 'nonce' );
+
+	$term_id = isset( $_POST['category'] ) ? absint( $_POST['category'] ) : 0;
+	if ( $term_id && ! term_exists( $term_id, 'product-category' ) ) {
+		wp_send_json_error( 'Unknown category.', 400 );
+	}
+
+	ob_start();
+	estore_render_product_grid( $term_id );
+	wp_send_json_success( array( 'html' => ob_get_clean() ) );
+}
+
+/** "Top rated" flag, shown as a checkbox on the product edit screen. */
+add_action( 'add_meta_boxes_products', function () {
+	add_meta_box( 'estore_top_rated', __( 'Home Page', 'estore-child' ), function ( $post ) {
+		wp_nonce_field( 'estore_top_rated_save', 'estore_top_rated_nonce' );
+		$on = get_post_meta( $post->ID, '_estore_top_rated', true );
+		echo '<label><input type="checkbox" name="estore_top_rated" value="1" ' . checked( $on, '1', false ) . '> '
+			. esc_html__( 'Feature in the Top Rated row', 'estore-child' ) . '</label>';
+	}, 'products', 'side' );
+} );
+
+add_action( 'save_post_products', function ( $post_id ) {
+	if ( ! isset( $_POST['estore_top_rated_nonce'] ) || ! wp_verify_nonce( $_POST['estore_top_rated_nonce'], 'estore_top_rated_save' ) ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	if ( isset( $_POST['estore_top_rated'] ) ) {
+		update_post_meta( $post_id, '_estore_top_rated', '1' );
+	} else {
+		delete_post_meta( $post_id, '_estore_top_rated' );
+	}
+} );

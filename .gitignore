@@ -16,6 +16,9 @@ wp-config.php
 /wp-content/themes/twenty*/
 /wp-content/plugins/hello.php
 
+# Figma reference renders (regenerate from the file key in CLAUDE.md)
+/figma-export/
+
 # Build / editor artefacts
 .sass-cache/
 node_modules/

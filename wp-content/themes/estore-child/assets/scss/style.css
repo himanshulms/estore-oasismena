@@ -11,6 +11,10 @@
      sass assets/scss/style.scss assets/scss/style.css
    ====================================================================== */
 /* --- Palette ---------------------------------------------------------- */
+/* Read from the Figma file itself (GET /v1/files), not eyeballed. Fill counts
+   across the Home frame: #989A9F x68, #FFFFFF x64, #133578 x35, #0A0A0A x5,
+   #0F0F0F x4. $accent is the Sign-in button, the hero button and the outlined
+   "AUDIO" stroke. #2563EB appears only as a 10% glow, never as a solid. */
 .text-ink {
   color: #0a0a0a; }
 
@@ -20,32 +24,41 @@
 .border-ink {
   border-color: #0a0a0a; }
 
-.text-surface {
+.text-panel {
   color: #0f0f0f; }
 
-.bg-surface {
+.bg-panel {
   background-color: #0f0f0f; }
 
-.border-surface {
+.border-panel {
   border-color: #0f0f0f; }
 
+.text-surface {
+  color: #161616; }
+
+.bg-surface {
+  background-color: #161616; }
+
+.border-surface {
+  border-color: #161616; }
+
 .text-surface-2 {
-  color: #141414; }
+  color: #1f1f1f; }
 
 .bg-surface-2 {
-  background-color: #141414; }
+  background-color: #1f1f1f; }
 
 .border-surface-2 {
-  border-color: #141414; }
+  border-color: #1f1f1f; }
 
 .text-accent {
-  color: #2563eb; }
+  color: #133578; }
 
 .bg-accent {
-  background-color: #2563eb; }
+  background-color: #133578; }
 
 .border-accent {
-  border-color: #2563eb; }
+  border-color: #133578; }
 
 .text-white {
   color: #ffffff; }
@@ -57,28 +70,29 @@
   border-color: #ffffff; }
 
 .text-muted {
-  color: rgba(255, 255, 255, 0.64); }
+  color: #989a9f; }
 
 .bg-muted {
-  background-color: rgba(255, 255, 255, 0.64); }
+  background-color: #989a9f; }
 
 .border-muted {
-  border-color: rgba(255, 255, 255, 0.64); }
+  border-color: #989a9f; }
 
 .text-faint {
-  color: rgba(255, 255, 255, 0.4); }
+  color: #6b7280; }
 
 .bg-faint {
-  background-color: rgba(255, 255, 255, 0.4); }
+  background-color: #6b7280; }
 
 .border-faint {
-  border-color: rgba(255, 255, 255, 0.4); }
+  border-color: #6b7280; }
 
 /* --- Layout metrics (Figma: 1440 frame / 1240 content / 100 gutter) ---- */
 :root {
   --container: 1240px;
   --gutter: 100px;
-  --radius: 24px;
+  --radius: 12px;
+  --radius-lg: 24px;
   --header-h: 80px; }
 
 /* --- Base ------------------------------------------------------------- */
@@ -86,7 +100,7 @@ html,
 body {
   background-color: #0a0a0a;
   color: #ffffff;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   font-weight: 400;
   font-size: 16px;
   -webkit-font-smoothing: antialiased; }
@@ -114,21 +128,21 @@ img {
 
 /* --- Type scale ------------------------------------------------------- */
 .display {
-  font-size: clamp(2.5rem, 1.4rem + 4vw, 4rem);
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  font-weight: 600; }
+  font-size: clamp(2.5rem, 1.5rem + 4.2vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 700; }
 
 .section-heading {
-  font-size: clamp(1.75rem, 1.1rem + 2.2vw, 2.5rem);
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.25rem);
   line-height: 1.15;
-  letter-spacing: -0.02em;
-  font-weight: 600; }
+  letter-spacing: -0.015em;
+  font-weight: 700; }
 
 .lede {
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.64); }
+  color: #989a9f; }
 
 /* --- Components ------------------------------------------------------- */
 .eyebrow {
@@ -136,20 +150,21 @@ img {
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
-  font-size: 0.8125rem;
-  letter-spacing: 0.08em;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.64); }
+  color: #989a9f; }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 26px;
-  border-radius: 999px;
+  padding: 14px 24px;
+  border-radius: 8px;
   font-weight: 500;
   font-size: 0.9375rem;
   line-height: 1;
@@ -157,12 +172,13 @@ img {
   .btn:hover {
     transform: translateY(-1px); }
   .btn--primary {
-    background-color: #2563eb;
-    color: #ffffff; }
+    background-color: #133578;
+    color: #ffffff;
+    box-shadow: 0 0 24px rgba(19, 53, 120, 0.55); }
     .btn--primary:hover {
-      background-color: #1d4ed8; }
+      background-color: #1b4699; }
   .btn--ghost {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #ffffff; }
     .btn--ghost:hover {
       background-color: rgba(255, 255, 255, 0.06);
@@ -178,17 +194,44 @@ img {
     left: 0;
     bottom: -6px;
     height: 1px;
-    background-color: #2563eb;
+    background-color: #133578;
     transition: width 0.25s ease; }
 
 .card {
-  background-color: #0f0f0f;
+  background-color: #161616;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 24px;
+  border-radius: 12px;
   transition: border-color 0.3s ease, background-color 0.3s ease; }
   .card:hover {
-    background-color: #141414;
-    border-color: rgba(255, 255, 255, 0.1); }
+    background-color: #1f1f1f;
+    border-color: rgba(255, 255, 255, 0.15); }
+
+/* Small blue category chip sitting on a product image. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background-color: rgba(19, 53, 120, 0.55);
+  border: 1px solid rgba(80, 120, 220, 0.35);
+  color: #9fb6e8;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  white-space: nowrap; }
+
+/* The huge ghosted 01 / 02 / 03 behind the vision-mission-values columns. */
+.ghost-number {
+  font-size: clamp(3.5rem, 2rem + 5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #1a1a1a;
+  user-select: none; }
+
+/* Outlined display text - the blue "AUDIO" / "PRODUCTS" word in the heroes. */
+.outlined {
+  color: transparent;
+  -webkit-text-stroke: 2px #133578;
+  paint-order: stroke fill; }
 
 /* Hero glow: the 384px blurred circle behind the hero art in Figma. */
 .glow {
@@ -202,7 +245,7 @@ img {
 
 /* Edge-to-edge scrolling logo strip (Figma "Marquee", 53.6px tall). */
 .marquee {
-  background-color: #0f0f0f;
+  background-color: #161616;
   border-block: 0.8px solid rgba(255, 255, 255, 0.06);
   padding-block: 16px;
   overflow: hidden; }
@@ -244,8 +287,8 @@ img {
   position: fixed;
   inset: 0 0 0 auto;
   width: min(88vw, 360px);
-  background-color: #0f0f0f;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #161616;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
   transform: translateX(100%);
   transition: transform 0.3s ease;
   z-index: 60; }
@@ -262,7 +305,7 @@ img {
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background-color: #2563eb;
+  background-color: #133578;
   color: #ffffff;
   opacity: 0;
   visibility: hidden;
@@ -276,3 +319,38 @@ img {
 .site-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   background-color: #0f0f0f; }
+
+/* Oversized, barely-visible OASIS wordmark behind the footer CTA. */
+.footer-wordmark {
+  font-size: clamp(4rem, 2rem + 9vw, 8.5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: #161616;
+  user-select: none; }
+
+.field {
+  background-color: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px 0 0 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 0.875rem;
+  width: 100%; }
+  .field::placeholder {
+    color: #6b7280; }
+  .field:focus {
+    outline: none;
+    border-color: rgba(80, 120, 220, 0.6); }
+
+/* Label / value rows in the product specification table. */
+.spec-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 240px) 1fr;
+  gap: 16px;
+  padding: 6px 0; }
+  .spec-row dt {
+    color: #989a9f; }
+  .spec-row dd {
+    margin: 0;
+    font-weight: 500; }

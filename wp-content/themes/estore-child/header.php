@@ -16,7 +16,7 @@
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 	<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
@@ -58,12 +58,18 @@
 		</nav>
 
 		<div class="flex items-center gap-3">
-			<?php $email = get_theme_mod( 'email_link' ); ?>
-			<?php if ( $email ) : ?>
-				<a href="mailto:<?php echo esc_attr( $email ); ?>" class="btn btn--primary hidden sm:inline-flex">
-					<?php esc_html_e( 'Get in touch', 'estore-child' ); ?>
-				</a>
-			<?php endif; ?>
+			<?php
+			// "Sign in" in the design. Points at the WP login unless a dedicated
+			// account page exists, so it never becomes a dead link.
+			$account = get_page_by_path( 'account' );
+			$sign_in = $account ? get_permalink( $account ) : wp_login_url( home_url( '/' ) );
+			?>
+			<a href="<?php echo esc_url( $sign_in ); ?>" class="btn btn--primary hidden sm:inline-flex !py-2.5 !px-5 text-sm">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 1115 0" />
+				</svg>
+				<?php esc_html_e( 'Sign in', 'estore-child' ); ?>
+			</a>
 
 			<button type="button" class="lg:hidden w-10 h-10 grid place-items-center rounded-full border border-white/10"
 				id="drawer-open" aria-label="<?php esc_attr_e( 'Open menu', 'estore-child' ); ?>"

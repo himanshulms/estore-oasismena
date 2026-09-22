@@ -2,80 +2,128 @@
 /**
  * Template Name: Home Page Template
  *
- * Sections below follow the Figma Home frame (#215:6345): hero, logo marquee,
- * then alternating content bands on the 1240px grid with 100px section gaps.
- * Each band reads CFS fields; a band renders nothing when its fields are empty,
- * so this is safe to assign before the field groups are filled in.
+ * Section order follows the Figma Home frame: hero -> stats -> marquee ->
+ * explore categories -> top rated -> deal band -> who we are -> management.
+ * Every band is wrapped in a truthiness check, so an install whose CFS groups
+ * are not filled in yet renders a short page rather than a broken one.
  */
 get_header();
 
-$cfs = function_exists( 'cfs' ) ? cfs() : null;
-$get = function ( $key ) use ( $cfs ) {
-	return $cfs ? $cfs->get( $key ) : '';
+$get = function ( $key ) {
+	return function_exists( 'cfs' ) ? cfs()->get( $key ) : '';
 };
 ?>
 
 <?php get_template_part( 'template-parts/hero-banner' ); ?>
 
-<?php
-/* --- Logo marquee (Figma "Marquee" #215:6431) --- */
-$logos = (array) $get( 'partner_logos' );
-?>
-<?php if ( $logos ) : ?>
-<section class="marquee mt-16" aria-label="<?php esc_attr_e( 'Partners', 'estore-child' ); ?>">
+<?php /* --- Stats strip: four figures divided by hairlines --- */ ?>
+<?php $stats = (array) $get( 'hero_stats' ); ?>
+<?php if ( $stats ) : ?>
+<section class="shell">
+	<dl class="grid grid-cols-2 lg:grid-cols-4 border-t border-b border-white/10">
+		<?php foreach ( $stats as $i => $stat ) : ?>
+			<div class="px-6 py-7 <?php echo $i ? 'lg:border-l border-white/10' : ''; ?>">
+				<dd class="text-3xl lg:text-[40px] font-semibold tracking-tight"><?php echo esc_html( $stat['stat_value'] ?? '' ); ?></dd>
+				<dt class="text-xs tracking-[0.12em] uppercase text-muted mt-1"><?php echo esc_html( $stat['stat_label'] ?? '' ); ?></dt>
+			</div>
+		<?php endforeach; ?>
+	</dl>
+</section>
+<?php endif; ?>
+
+<?php /* --- Scrolling keyword marquee --- */ ?>
+<?php $ticker = (array) $get( 'marquee_items' ); ?>
+<?php if ( $ticker ) : ?>
+<section class="marquee" aria-label="<?php esc_attr_e( 'Capabilities', 'estore-child' ); ?>">
 	<div class="marquee__track">
 		<?php for ( $pass = 0; $pass < 2; $pass++ ) : ?>
-			<?php foreach ( $logos as $logo ) : ?>
-				<?php $src = isset( $logo['logo_image'] ) ? trim( (string) $logo['logo_image'] ) : ''; ?>
-				<?php if ( ! $src ) { continue; } ?>
-				<img src="<?php echo esc_url( $src ); ?>"
-					alt="<?php echo esc_attr( $logo['logo_name'] ?? '' ); ?>"
-					class="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
-					loading="lazy" <?php echo $pass ? 'aria-hidden="true"' : ''; ?>>
+			<?php foreach ( $ticker as $item ) : ?>
+				<span class="flex items-center gap-14 text-sm text-muted whitespace-nowrap" <?php echo $pass ? 'aria-hidden="true"' : ''; ?>>
+					<?php echo esc_html( $item['marquee_text'] ?? '' ); ?>
+					<span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+				</span>
 			<?php endforeach; ?>
 		<?php endfor; ?>
 	</div>
 </section>
 <?php endif; ?>
 
-<?php /* --- Intro band --- */ ?>
-<?php if ( $get( 'intro_heading' ) ) : ?>
+<?php /* --- Explore categories: alternating image / detail bands --- */ ?>
+<?php
+$cats = get_terms( array(
+	'taxonomy'   => 'product-category',
+	'hide_empty' => false,
+	'orderby'    => 'term_order',
+) );
+?>
+<?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
 <section class="py-20 lg:py-[100px]">
 	<div class="shell">
-		<div class="max-w-3xl" data-aos="fade-up">
-			<?php if ( $get( 'intro_eyebrow' ) ) : ?>
-				<span class="eyebrow mb-6"><?php echo esc_html( $get( 'intro_eyebrow' ) ); ?></span>
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">
+			<div class="lg:col-span-7">
+				<?php if ( $get( 'categories_eyebrow' ) ) : ?>
+					<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'categories_eyebrow' ) ); ?></p>
+				<?php endif; ?>
+				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'categories_heading' ) ?: __( 'Explore Categories', 'estore-child' ) ); ?></h2>
+			</div>
+			<?php if ( $get( 'categories_description' ) ) : ?>
+				<div class="lg:col-span-4 lg:col-start-9">
+					<p class="text-sm text-muted leading-relaxed"><?php echo esc_html( $get( 'categories_description' ) ); ?></p>
+				</div>
 			<?php endif; ?>
-			<h2 class="section-heading"><?php echo wp_kses_post( $get( 'intro_heading' ) ); ?></h2>
-			<?php if ( $get( 'intro_description' ) ) : ?>
-				<p class="lede mt-5"><?php echo wp_kses_post( $get( 'intro_description' ) ); ?></p>
-			<?php endif; ?>
+		</div>
+
+		<div class="rounded-[16px] overflow-hidden border border-white/[0.06]">
+			<?php foreach ( $cats as $i => $term ) : ?>
+				<?php get_template_part( 'template-parts/category-row', null, array( 'term' => $term, 'index' => $i ) ); ?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>
 <?php endif; ?>
 
+<?php /* --- Top rated products --- */ ?>
 <?php
-/* --- Services grid, from the `services` CPT --- */
-$services = new WP_Query( array(
-	'post_type'      => 'services',
+$top = new WP_Query( array(
+	'post_type'      => 'products',
 	'post_status'    => 'publish',
-	'posts_per_page' => -1,
-	'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
+	'posts_per_page' => 3,
+	'meta_key'       => '_estore_top_rated',
+	'meta_value'     => '1',
+	'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'DESC' ),
 ) );
+// Fall back to the newest products so the row is never empty before an editor
+// has flagged anything as top rated.
+if ( ! $top->have_posts() ) {
+	$top = new WP_Query( array(
+		'post_type'      => 'products',
+		'post_status'    => 'publish',
+		'posts_per_page' => 3,
+		'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'DESC' ),
+	) );
+}
+$shop = get_page_by_path( 'products' );
 ?>
-<?php if ( $services->have_posts() ) : ?>
+<?php if ( $top->have_posts() ) : ?>
 <section class="py-20 lg:py-[100px]">
 	<div class="shell">
-		<?php if ( $get( 'services_heading' ) ) : ?>
-			<h2 class="section-heading mb-10" data-aos="fade-up"><?php echo wp_kses_post( $get( 'services_heading' ) ); ?></h2>
-		<?php endif; ?>
+		<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
+			<div>
+				<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'top_rated_eyebrow' ) ?: __( 'Best Performers', 'estore-child' ) ); ?></p>
+				<h2 class="display uppercase"><?php echo esc_html( $get( 'top_rated_heading' ) ?: __( 'Top Rated', 'estore-child' ) ); ?></h2>
+			</div>
+			<a href="<?php echo esc_url( $shop ? get_permalink( $shop ) : home_url( '/products/' ) ); ?>" class="btn btn--ghost shrink-0">
+				<?php esc_html_e( 'Browse All Products', 'estore-child' ); ?>
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+				</svg>
+			</a>
+		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			<?php $i = 0; ?>
-			<?php while ( $services->have_posts() ) : ?>
-				<?php $services->the_post(); ?>
-				<?php get_template_part( 'template-parts/feature-card', null, array( 'index' => $i++ ) ); ?>
+			<?php while ( $top->have_posts() ) : ?>
+				<?php $top->the_post(); ?>
+				<?php get_template_part( 'template-parts/product-card' ); ?>
 			<?php endwhile; ?>
 			<?php wp_reset_postdata(); ?>
 		</div>
@@ -83,34 +131,126 @@ $services = new WP_Query( array(
 </section>
 <?php endif; ?>
 
-<?php
-/* --- Closing CTA band (Figma "Container" #215:6700) --- */
-$cta_heading = $get( 'cta_heading' );
-?>
-<?php if ( $cta_heading ) : ?>
+<?php /* --- Deal band --- */ ?>
+<?php if ( $get( 'deal_heading' ) ) : ?>
 <section class="py-10 lg:py-16">
 	<div class="shell">
-		<div class="relative overflow-hidden rounded-[24px] bg-surface border border-white/[0.06] min-h-[420px] lg:min-h-[542px] flex items-center">
+		<div class="relative overflow-hidden rounded-[24px] bg-panel border border-white/[0.06] min-h-[420px] lg:min-h-[542px] flex items-center">
 
-			<?php if ( $get( 'cta_image' ) ) : ?>
-				<img src="<?php echo esc_url( $get( 'cta_image' ) ); ?>" alt=""
-					class="absolute inset-0 w-full h-full object-cover opacity-25" aria-hidden="true">
+			<?php if ( $get( 'deal_image' ) ) : ?>
+				<img src="<?php echo esc_url( $get( 'deal_image' ) ); ?>" alt=""
+					class="absolute inset-0 w-full h-full object-cover opacity-25" aria-hidden="true" loading="lazy">
 				<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-[#0A0A0A]/30" aria-hidden="true"></div>
 			<?php endif; ?>
 
 			<div class="glow right-[12%] top-[14%]" aria-hidden="true"></div>
 
-			<div class="relative px-8 lg:px-[100px] py-16 max-w-[661px]" data-aos="fade-up">
-				<h2 class="section-heading"><?php echo wp_kses_post( $cta_heading ); ?></h2>
-				<?php if ( $get( 'cta_text' ) ) : ?>
-					<p class="lede mt-5"><?php echo wp_kses_post( $get( 'cta_text' ) ); ?></p>
+			<div class="relative px-8 lg:px-[72px] py-16 max-w-[661px]" data-aos="fade-up">
+				<div class="flex items-center gap-3 mb-7">
+					<?php if ( $get( 'deal_badge' ) ) : ?>
+						<span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#3A1416] border border-[#E84B50]/40 text-[11px] font-semibold tracking-[0.12em] uppercase text-[#E84B50]">
+							<span class="w-1.5 h-1.5 rounded-full bg-[#E84B50]" aria-hidden="true"></span>
+							<?php echo esc_html( $get( 'deal_badge' ) ); ?>
+						</span>
+					<?php endif; ?>
+					<?php if ( $get( 'deal_discount' ) ) : ?>
+						<span class="px-3.5 py-1.5 rounded-full bg-accent text-sm font-bold"><?php echo esc_html( $get( 'deal_discount' ) ); ?></span>
+					<?php endif; ?>
+				</div>
+
+				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'deal_heading' ) ); ?></h2>
+
+				<?php if ( $get( 'deal_text' ) ) : ?>
+					<p class="lede mt-5 text-base"><?php echo wp_kses_post( $get( 'deal_text' ) ); ?></p>
 				<?php endif; ?>
-				<?php if ( $get( 'cta_button_label' ) && $get( 'cta_button_url' ) ) : ?>
-					<a href="<?php echo esc_url( $get( 'cta_button_url' ) ); ?>" class="btn btn--primary mt-8">
-						<?php echo esc_html( $get( 'cta_button_label' ) ); ?>
-					</a>
-				<?php endif; ?>
+
+				<div class="flex flex-wrap items-center gap-3 mt-8">
+					<?php if ( $get( 'deal_button_label' ) ) : ?>
+						<a href="<?php echo esc_url( $get( 'deal_button_url' ) ?: '#' ); ?>" class="btn btn--primary">
+							<?php echo esc_html( $get( 'deal_button_label' ) ); ?>
+							<span class="w-6 h-6 grid place-items-center rounded-full border border-white/30">
+								<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9" />
+								</svg>
+							</span>
+						</a>
+					<?php endif; ?>
+					<?php if ( $get( 'deal_link_label' ) ) : ?>
+						<a href="<?php echo esc_url( $get( 'deal_link_url' ) ?: '#' ); ?>" class="btn btn--ghost">
+							<?php echo esc_html( $get( 'deal_link_label' ) ); ?>
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+							</svg>
+						</a>
+					<?php endif; ?>
+				</div>
 			</div>
+		</div>
+	</div>
+</section>
+<?php endif; ?>
+
+<?php /* --- Who we are: vision / mission / values --- */ ?>
+<?php $pillars = (array) $get( 'pillars' ); ?>
+<?php if ( $get( 'about_heading' ) || $pillars ) : ?>
+<section class="py-20 lg:py-[100px]">
+	<div class="shell">
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+			<div class="lg:col-span-7">
+				<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'about_eyebrow' ) ?: __( 'Who We Are', 'estore-child' ) ); ?></p>
+				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'about_heading' ) ); ?></h2>
+			</div>
+			<?php if ( $get( 'about_description' ) ) : ?>
+				<div class="lg:col-span-4 lg:col-start-9">
+					<p class="text-sm text-muted leading-relaxed"><?php echo esc_html( $get( 'about_description' ) ); ?></p>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( $pillars ) : ?>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 mt-12 pt-12 border-t border-white/10">
+				<?php foreach ( $pillars as $i => $pillar ) : ?>
+					<div data-aos="fade-up" data-aos-delay="<?php echo esc_attr( $i * 80 ); ?>">
+						<div class="flex items-start justify-between gap-4">
+							<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
+								<span class="w-11 h-11 grid place-items-center rounded-xl bg-accent/25 border border-accent/40">
+									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-5 h-5" aria-hidden="true">
+								</span>
+							<?php endif; ?>
+							<span class="ghost-number" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
+						</div>
+						<h3 class="text-xl font-semibold mt-6 mb-3"><?php echo esc_html( $pillar['pillar_title'] ?? '' ); ?></h3>
+						<p class="text-sm text-muted leading-relaxed"><?php echo esc_html( $pillar['pillar_text'] ?? '' ); ?></p>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+	</div>
+</section>
+<?php endif; ?>
+
+<?php /* --- Management --- */ ?>
+<?php $team = (array) $get( 'management' ); ?>
+<?php if ( $team ) : ?>
+<section class="py-20 lg:py-[100px]">
+	<div class="shell text-center">
+		<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( $get( 'team_eyebrow' ) ?: __( 'Our Team', 'estore-child' ) ); ?></p>
+		<h2 class="display uppercase"><?php echo esc_html( $get( 'team_heading' ) ?: __( 'Management', 'estore-child' ) ); ?></h2>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 mt-14 text-left">
+			<?php foreach ( $team as $i => $member ) : ?>
+				<div class="flex items-center gap-6 p-8 border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r' : ''; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
+					data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
+					<?php if ( ! empty( $member['member_photo'] ) ) : ?>
+						<img src="<?php echo esc_url( $member['member_photo'] ); ?>" alt="<?php echo esc_attr( $member['member_name'] ?? '' ); ?>"
+							class="w-28 h-28 lg:w-36 lg:h-36 rounded-full object-cover shrink-0" loading="lazy">
+					<?php endif; ?>
+					<div>
+						<h3 class="text-lg font-semibold"><?php echo esc_html( $member['member_name'] ?? '' ); ?></h3>
+						<p class="text-sm text-muted mt-1"><?php echo esc_html( $member['member_role'] ?? '' ); ?></p>
+					</div>
+				</div>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

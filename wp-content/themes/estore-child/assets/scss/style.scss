@@ -12,19 +12,28 @@
    ====================================================================== */
 
 /* --- Palette ---------------------------------------------------------- */
+/* Read from the Figma file itself (GET /v1/files), not eyeballed. Fill counts
+   across the Home frame: #989A9F x68, #FFFFFF x64, #133578 x35, #0A0A0A x5,
+   #0F0F0F x4. $accent is the Sign-in button, the hero button and the outlined
+   "AUDIO" stroke. #2563EB appears only as a 10% glow, never as a solid. */
 $ink: #0a0a0a; // page background
-$surface: #0f0f0f; // raised strips (marquee, cards)
-$surface-2: #141414; // hover / nested surface
-$accent: #2563eb; // primary blue
-$accent-soft: rgba(19, 53, 120, 0.1); // hero glow
+$panel: #0f0f0f; // section panels, marquee strip
+$surface: #161616; // cards, footer, inputs
+$surface-2: #1f1f1f; // card hover / nested surface
+$accent: #133578; // primary navy blue
+$accent-hi: #1b4699; // hover
+$accent-soft: rgba(19, 53, 120, 0.1); // hero + CTA glow
+$danger: #e84b50; // "MEGA DEAL" pill
 $white: #ffffff;
-$muted: rgba(255, 255, 255, 0.64);
-$faint: rgba(255, 255, 255, 0.4);
-$line: rgba(255, 255, 255, 0.1);
+$muted: #989a9f; // measured: the most-used text colour in the file
+$faint: #6b7280;
+$line: rgba(255, 255, 255, 0.15);
 $line-soft: rgba(255, 255, 255, 0.06);
+$line-faint: rgba(255, 255, 255, 0.05);
 
 $colors: (
     "ink": $ink,
+    "panel": $panel,
     "surface": $surface,
     "surface-2": $surface-2,
     "accent": $accent,
@@ -48,13 +57,16 @@ $colors: (
 /* --- Layout metrics (Figma: 1440 frame / 1240 content / 100 gutter) ---- */
 $container: 1240px;
 $gutter: 100px;
-$radius: 24px;
+$radius: 12px; // cards (x17 in the file); the CTA band alone uses 24px
+$radius-lg: 24px;
+$radius-btn: 8px; // buttons (x6)
 $header-h: 80px;
 
 :root {
     --container: #{$container};
     --gutter: #{$gutter};
     --radius: #{$radius};
+    --radius-lg: #{$radius-lg};
     --header-h: #{$header-h};
 }
 
@@ -63,7 +75,9 @@ html,
 body {
     background-color: $ink;
     color: $white;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    // Plus Jakarta Sans - read from the Figma file's text style data, every
+    // text node in the Home frame uses it (weights 400/500/600/700).
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
     font-weight: 400;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -97,21 +111,21 @@ img {
 
 /* --- Type scale ------------------------------------------------------- */
 .display {
-    font-size: clamp(2.5rem, #{"1.4rem + 4vw"}, 4rem);
-    line-height: 1.06;
-    letter-spacing: -0.03em;
-    font-weight: 600;
+    font-size: clamp(2.5rem, #{"1.5rem + 4.2vw"}, 3.75rem); // 60px at 1440
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 700;
 }
 
 .section-heading {
-    font-size: clamp(1.75rem, #{"1.1rem + 2.2vw"}, 2.5rem);
+    font-size: clamp(1.75rem, #{"1.2rem + 2.2vw"}, 2.25rem); // 36px at 1440
     line-height: 1.15;
-    letter-spacing: -0.02em;
-    font-weight: 600;
+    letter-spacing: -0.015em;
+    font-weight: 700;
 }
 
 .lede {
-    font-size: 1.125rem;
+    font-size: 0.875rem; // 14px/400 is the body size throughout the file
     line-height: 1.6;
     color: $muted;
 }
@@ -124,8 +138,9 @@ img {
     padding: 6px 14px;
     border: 1px solid $line;
     border-radius: 999px;
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
+    font-size: 0.875rem; // 14px/500, letter-spacing 0.35px in the file
+    font-weight: 500;
+    letter-spacing: 0.025em;
     text-transform: uppercase;
     color: $muted;
 }
@@ -135,8 +150,8 @@ img {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 14px 26px;
-    border-radius: 999px;
+    padding: 14px 24px;
+    border-radius: $radius-btn; // rounded rect in the design, NOT a pill
     font-weight: 500;
     font-size: 0.9375rem;
     line-height: 1;
@@ -149,9 +164,10 @@ img {
     &--primary {
         background-color: $accent;
         color: $white;
+        box-shadow: 0 0 24px rgba(19, 53, 120, 0.55);
 
         &:hover {
-            background-color: #1d4ed8;
+            background-color: $accent-hi;
         }
     }
 
@@ -192,6 +208,36 @@ img {
         background-color: $surface-2;
         border-color: $line;
     }
+}
+
+/* Small blue category chip sitting on a product image. */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background-color: rgba(19, 53, 120, 0.55);
+    border: 1px solid rgba(80, 120, 220, 0.35);
+    color: #9fb6e8;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* The huge ghosted 01 / 02 / 03 behind the vision-mission-values columns. */
+.ghost-number {
+    font-size: clamp(3.5rem, #{"2rem + 5vw"}, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: #1a1a1a;
+    user-select: none;
+}
+
+/* Outlined display text - the blue "AUDIO" / "PRODUCTS" word in the heroes. */
+.outlined {
+    color: transparent;
+    -webkit-text-stroke: 2px $accent;
+    paint-order: stroke fill;
 }
 
 /* Hero glow: the 384px blurred circle behind the hero art in Figma. */
@@ -301,5 +347,51 @@ img {
 /* --- Footer ----------------------------------------------------------- */
 .site-footer {
     border-top: 1px solid $line-soft;
+    background-color: $panel;
+}
+
+/* Oversized, barely-visible OASIS wordmark behind the footer CTA. */
+.footer-wordmark {
+    font-size: clamp(4rem, #{"2rem + 9vw"}, 8.5rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 0.9;
+    color: #161616;
+    user-select: none;
+}
+
+.field {
     background-color: $surface;
+    border: 1px solid $line;
+    border-radius: 8px 0 0 8px;
+    padding: 12px 16px;
+    color: $white;
+    font-size: 0.875rem;
+    width: 100%;
+
+    &::placeholder {
+        color: $faint;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: rgba(80, 120, 220, 0.6);
+    }
+}
+
+/* Label / value rows in the product specification table. */
+.spec-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 240px) 1fr;
+    gap: 16px;
+    padding: 6px 0;
+
+    dt {
+        color: $muted;
+    }
+
+    dd {
+        margin: 0;
+        font-weight: 500;
+    }
 }
