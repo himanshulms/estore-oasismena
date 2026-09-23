@@ -43,12 +43,12 @@ while ( have_posts() ) :
 	?>
 
 	<!-- Category hero -->
-	<section class="relative overflow-hidden min-h-[380px] lg:min-h-[460px] flex items-center">
+	<section class="relative overflow-hidden min-h-[380px] lg:min-h-[460px] flex items-center"
+		style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%">
 		<?php if ( $hero ) : ?>
-			<img src="<?php echo esc_url( $hero ); ?>" alt=""
-				class="absolute inset-y-0 h-full object-cover object-center w-full lg:w-[69.4%] lg:left-[39.6%]" aria-hidden="true">
-			<div class="absolute inset-0 bg-[linear-gradient(to_right,#0A0A0A_0%,#0A0A0A_39.6%,transparent_81.5%)]" aria-hidden="true"></div>
-			<div class="absolute inset-x-0 bottom-0 h-[131px] bg-gradient-to-b from-transparent to-[#0A0A0A]" aria-hidden="true"></div>
+			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="hero-media" aria-hidden="true">
+			<div class="hero-scrim" aria-hidden="true"></div>
+			<div class="hero-fade" aria-hidden="true"></div>
 		<?php endif; ?>
 		<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 

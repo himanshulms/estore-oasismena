@@ -182,11 +182,12 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 14px 24px;
+    gap: 8px;
+    height: 50px; // Figma hero buttons are 178x50 / 181x50
+    padding: 0 22px;
     border-radius: $radius-btn; // rounded rect in the design, NOT a pill
     font-weight: 500;
-    font-size: 0.9375rem;
+    font-size: 0.875rem; // 14/500
     line-height: 1;
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 
@@ -404,6 +405,53 @@ img {
     .btn:hover {
         transform: none;
     }
+}
+
+/* Hero photo + scrim. Every page frames its photo differently and fades it at
+   a different point, so the four numbers are custom properties the template
+   sets per page rather than one shared gradient:
+
+     page      left    width   opaque to   clear by
+     home      39.6%   69.4%   39.6%       81.5%
+     products  26.7%   82.4%   31.1%       55.9%
+     detail    30.5%   69.5%   30.5%       65.3%
+
+   Using home's values everywhere over-darkens the other two. */
+.hero-media {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    left: var(--hero-left, 39.6%);
+    width: var(--hero-width, 69.4%);
+    object-fit: cover;
+    object-position: center;
+
+    @media (max-width: 1023px) {
+        left: 0;
+        width: 100%;
+    }
+}
+
+.hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        #{$ink} 0%,
+        #{$ink} var(--hero-opaque, 39.6%),
+        transparent var(--hero-clear, 81.5%)
+    );
+}
+
+/* The 131px band that melts the photo into the page (Figma 215:6385). */
+.hero-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 131px;
+    background: linear-gradient(to bottom, transparent, #{$ink});
 }
 
 /* --- Header ----------------------------------------------------------- */

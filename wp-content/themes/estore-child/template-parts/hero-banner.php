@@ -12,8 +12,16 @@
  */
 $slides  = function_exists( 'cfs' ) ? (array) cfs()->get( 'hero_slider' ) : array();
 $is_home = is_front_page();
+
+// Each page frames its hero photo differently in the file - see .hero-media.
+$is_products = is_page_template( 'templates/products.php' );
+$hero_vars   = $is_home
+	? '--hero-left:39.6%;--hero-width:69.4%;--hero-opaque:39.6%;--hero-clear:81.5%'
+	: ( $is_products
+		? '--hero-left:26.7%;--hero-width:82.4%;--hero-opaque:31.1%;--hero-clear:55.9%'
+		: '--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%' );
 // Figma: the home hero runs from the 80px header to y=800 before the stats row.
-$height  = $is_home ? 'min-h-[620px] lg:min-h-[720px]' : 'min-h-[300px] lg:min-h-[380px]';
+$height  = $is_home ? 'min-h-[620px] lg:min-h-[667px]' : 'min-h-[300px] lg:min-h-[380px]';
 
 if ( ! $slides ) {
 	$slides = array( array( 'slide_title' => get_the_title() ) );
@@ -21,7 +29,7 @@ if ( ! $slides ) {
 $multi = count( $slides ) > 1;
 ?>
 
-<section class="relative overflow-hidden <?php echo esc_attr( $height ); ?>">
+<section class="relative overflow-hidden <?php echo esc_attr( $height ); ?>" style="<?php echo esc_attr( $hero_vars ); ?>">
 	<div class="swiper hero-swiper h-full"
 		data-slides-per-view="1" data-slides-tablet="1" data-slides-mobile="1"
 		data-space-between="0"
@@ -42,21 +50,16 @@ $multi = count( $slides ) > 1;
 				<div class="swiper-slide relative">
 
 					<?php if ( $image ) : ?>
-						<img src="<?php echo esc_url( $image ); ?>" alt=""
-							class="absolute inset-y-0 h-full object-cover object-center w-full lg:w-[69.4%] lg:left-[39.6%]" aria-hidden="true">
-						<div class="absolute inset-0 bg-[linear-gradient(to_right,#0A0A0A_0%,#0A0A0A_39.6%,transparent_81.5%)]" aria-hidden="true"></div>
-
-						<!-- Figma 215:6385: a 131px band fading the photo into the page
-						     at the bottom of the hero, so the image melts out instead
-						     of ending on a hard edge. -->
-						<div class="absolute inset-x-0 bottom-0 h-[131px] bg-gradient-to-b from-transparent to-[#0A0A0A]" aria-hidden="true"></div>
+						<img src="<?php echo esc_url( $image ); ?>" alt="" class="hero-media" aria-hidden="true">
+						<div class="hero-scrim" aria-hidden="true"></div>
+						<div class="hero-fade" aria-hidden="true"></div>
 					<?php endif; ?>
 
 					<!-- Figma 215:6383: 500px, #133578 @ 8%, blur(120px). Sits over the
 					     photo and under the copy, so it goes after the gradient. -->
 					<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
-					<div class="relative shell h-full flex flex-col justify-center py-14 <?php echo $is_home ? 'lg:pt-[54px] lg:pb-20' : ''; ?>">
+					<div class="relative shell h-full flex flex-col <?php echo $is_home ? 'lg:justify-start lg:pt-[54px] lg:pb-[44px] justify-center py-14' : 'justify-center py-14'; ?>">
 						<div class="max-w-[720px]">
 
 							<?php if ( $eyebrow ) : ?>
@@ -89,13 +92,13 @@ $multi = count( $slides ) > 1;
 							<?php endif; ?>
 
 							<?php if ( $desc ) : ?>
-								<div class="flex items-start gap-6 mt-9 max-w-[500px]" data-aos="fade-up" data-aos-delay="120">
-									<span class="hidden sm:block w-10 h-px bg-accent mt-[11px] shrink-0" aria-hidden="true"></span>
+								<div class="flex items-center gap-6 mt-9 max-w-[424px]" data-aos="fade-up" data-aos-delay="120">
+									<span class="hidden sm:block w-10 h-px bg-accent shrink-0" aria-hidden="true"></span>
 									<p class="lede"><?php echo wp_kses_post( $desc ); ?></p>
 								</div>
 							<?php endif; ?>
 
-							<div class="flex flex-wrap items-center gap-4 mt-10" data-aos="fade-up" data-aos-delay="180">
+							<div class="flex flex-wrap items-center gap-6 mt-[60px]" data-aos="fade-up" data-aos-delay="180">
 								<?php if ( ! empty( $slide['slide_cta_label'] ) ) : ?>
 									<a href="<?php echo esc_url( $slide['slide_cta_url'] ?? '#' ); ?>" class="btn btn--primary">
 										<?php echo esc_html( $slide['slide_cta_label'] ); ?>

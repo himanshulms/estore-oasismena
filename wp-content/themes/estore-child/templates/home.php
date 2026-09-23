@@ -19,7 +19,7 @@ $get = function ( $key ) {
 <?php /* --- Stats strip: four figures divided by hairlines --- */ ?>
 <?php $stats = (array) $get( 'hero_stats' ); ?>
 <?php if ( $stats ) : ?>
-<section class="shell">
+<section class="shell mt-14 lg:mt-[100px]">
 	<dl class="grid grid-cols-2 lg:grid-cols-4 border-t border-b border-white/10">
 		<?php foreach ( $stats as $i => $stat ) : ?>
 			<div class="py-6 <?php echo $i ? 'lg:border-l border-white/10 lg:pl-8' : ''; ?>">
