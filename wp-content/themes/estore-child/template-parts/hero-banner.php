@@ -16,10 +16,10 @@ $is_home = is_front_page();
 // Each page frames its hero photo differently in the file - see .hero-media.
 $is_products = is_page_template( 'templates/products.php' );
 $hero_vars   = $is_home
-	? '--hero-left:39.6%;--hero-width:69.4%;--hero-opaque:39.6%;--hero-clear:81.5%'
+	? '--hero-left:39.6%;--hero-width:69.4%;--hero-opaque:39.6%;--hero-clear:81.5%;--hero-pt:54px'
 	: ( $is_products
-		? '--hero-left:26.7%;--hero-width:82.4%;--hero-opaque:31.1%;--hero-clear:55.9%'
-		: '--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%' );
+		? '--hero-left:26.7%;--hero-width:82.4%;--hero-opaque:31.1%;--hero-clear:55.9%;--hero-pt:155px'
+		: '--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%;--hero-pt:145px' );
 // Figma: the home hero runs from the 80px header to y=800 before the stats row.
 $height  = 'min-h-[560px] lg:min-h-[667px]';
 
@@ -59,7 +59,7 @@ $multi = count( $slides ) > 1;
 					     photo and under the copy, so it goes after the gradient. -->
 					<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
-					<div class="relative shell h-full flex flex-col justify-center py-14 lg:justify-end lg:py-0 lg:pb-[54px]">
+					<div class="relative shell hero-copy flex flex-col justify-center lg:justify-start">
 						<div class="max-w-[720px]">
 
 							<?php if ( $eyebrow ) : ?>

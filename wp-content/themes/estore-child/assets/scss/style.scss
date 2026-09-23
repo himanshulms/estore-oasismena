@@ -486,6 +486,19 @@ img {
     min-height: inherit;
 }
 
+/* The copy block starts at a measured offset from the hero top rather than
+   being centred or bottom-aligned: home 54px, products 155px, detail 145px. */
+.hero-copy {
+    // Tailwind's CDN styles are injected after this sheet, so any py-* utility
+    // on this element would win. The padding is owned here instead.
+    padding-block: 56px;
+
+    @media (min-width: 1024px) {
+        padding-top: var(--hero-pt, 54px);
+        padding-bottom: 0;
+    }
+}
+
 /* Hero photo + scrim. Every page frames its photo differently and fades it at
    a different point, so the four numbers are custom properties the template
    sets per page rather than one shared gradient:

@@ -43,8 +43,8 @@ while ( have_posts() ) :
 	?>
 
 	<!-- Category hero -->
-	<section class="relative overflow-hidden min-h-[560px] lg:min-h-[667px] flex items-end"
-		style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%">
+	<section class="relative overflow-hidden min-h-[560px] lg:min-h-[667px] flex items-start"
+		style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%;--hero-pt:145px">
 		<?php if ( $hero ) : ?>
 			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="hero-media" aria-hidden="true">
 			<div class="hero-scrim" aria-hidden="true"></div>
@@ -52,7 +52,7 @@ while ( have_posts() ) :
 		<?php endif; ?>
 		<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
-		<div class="relative shell pb-[54px] pt-16 w-full">
+		<div class="relative shell hero-copy w-full">
 			<nav class="eyebrow-text mb-[22px] flex items-center gap-2" aria-label="<?php esc_attr_e( 'Breadcrumb', 'estore-child' ); ?>">
 				<?php $shop = get_page_by_path( 'products' ); ?>
 				<a href="<?php echo esc_url( $shop ? get_permalink( $shop ) : home_url( '/products/' ) ); ?>" class="hover:text-white transition-colors">
@@ -62,6 +62,38 @@ while ( have_posts() ) :
 				<span class="text-white"><?php esc_html_e( 'Product details', 'estore-child' ); ?></span>
 			</nav>
 			<h1 class="display-hero uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
+
+			<?php
+			// Figma 215:7428 / 215:7432. Sourced from the Products page hero so
+			// an editor changes this copy in one place.
+			$shop_page = get_page_by_path( 'products' );
+			$shop_hero = ( $shop_page && function_exists( 'cfs' ) ) ? (array) cfs()->get( 'hero_slider', $shop_page->ID ) : array();
+			$shop_hero = $shop_hero[0] ?? array();
+			?>
+
+			<?php if ( ! empty( $shop_hero['slide_description'] ) ) : ?>
+				<div class="flex items-center gap-6 mt-9 max-w-[424px]">
+					<span class="hidden sm:block w-10 h-px bg-accent shrink-0" aria-hidden="true"></span>
+					<p class="lede"><?php echo wp_kses_post( $shop_hero['slide_description'] ); ?></p>
+				</div>
+			<?php endif; ?>
+
+			<div class="flex flex-wrap items-center gap-6 mt-[60px]">
+				<a href="<?php echo esc_url( $shop_page ? get_permalink( $shop_page ) : home_url( '/products/' ) ); ?>" class="btn btn--primary">
+					<?php echo esc_html( estore_label( 'catalogue_heading', __( 'Explore Products', 'estore-child' ) ) ); ?>
+					<span class="w-6 h-6 grid place-items-center rounded-full border border-white/30">
+						<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9" />
+						</svg>
+					</span>
+				</a>
+				<a href="<?php echo esc_url( estore_quote_url( $id ) ); ?>" class="btn btn--ghost">
+					<?php echo esc_html( estore_quote_label() ); ?>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+					</svg>
+				</a>
+			</div>
 		</div>
 	</section>
 
