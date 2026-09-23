@@ -250,45 +250,7 @@ $shop = get_page_by_path( 'products' );
 </section>
 <?php endif; ?>
 
-<?php /* --- Management --- */ ?>
-<?php $team = (array) $get( 'management' ); ?>
-<?php if ( $team ) : ?>
-<section class="py-14 lg:py-[60px]">
-	<div class="shell text-center">
-		<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'team_eyebrow' ) ?: __( 'Our Team', 'estore-child' ) ); ?></p>
-		<h2 class="display uppercase"><?php echo esc_html( $get( 'team_heading' ) ?: __( 'Management', 'estore-child' ) ); ?></h2>
-
-		<div class="relative mt-12">
-			<!-- Figma 215:6775: 520px lime circle at 10%, blurred, centred on the grid -->
-			<span class="glow glow--team left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></span>
-
-			<div class="relative grid grid-cols-1 md:grid-cols-2 text-left">
-			<?php foreach ( $team as $i => $member ) : ?>
-				<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
-					data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
-					<?php if ( ! empty( $member['member_photo'] ) ) : ?>
-						<?php
-						// Figma crops each portrait differently inside the circle, so the
-						// focus point is per-member rather than always centred.
-						$focus = trim( (string) ( $member['member_focus'] ?? '' ) );
-						?>
-						<div class="team-photo">
-							<img src="<?php echo esc_url( $member['member_photo'] ); ?>"
-								alt="<?php echo esc_attr( $member['member_name'] ?? '' ); ?>"
-								<?php echo $focus ? 'style="object-position:center ' . esc_attr( $focus ) . '"' : ''; ?>
-								loading="lazy">
-						</div>
-					<?php endif; ?>
-					<div>
-						<h3 class="text-xl font-bold leading-8"><?php echo esc_html( $member['member_name'] ?? '' ); ?></h3>
-						<p class="lede mt-1"><?php echo esc_html( $member['member_role'] ?? '' ); ?></p>
-					</div>
-				</div>
-				<?php endforeach; ?>
-			</div>
-		</div>
-	</div>
-</section>
-<?php endif; ?>
+<?php /* --- Management: shared with the About page --- */ ?>
+<?php get_template_part( 'template-parts/management', null, array( 'post_id' => get_the_ID() ) ); ?>
 
 <?php get_footer(); ?>
