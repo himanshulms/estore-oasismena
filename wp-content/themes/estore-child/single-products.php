@@ -45,8 +45,8 @@ while ( have_posts() ) :
 	<?php $hero = $term ? get_term_meta( $term->term_id, 'category_image', true ) : ''; ?>
 	<section class="relative overflow-hidden min-h-[380px] lg:min-h-[460px] flex items-center">
 		<?php if ( $hero ) : ?>
-			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="absolute inset-y-0 right-0 w-full lg:w-[72%] h-full object-cover" aria-hidden="true">
-			<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] via-[38%] to-transparent" aria-hidden="true"></div>
+			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="absolute inset-y-0 h-full object-cover object-center w-full lg:w-[69.4%] lg:left-[39.6%]" aria-hidden="true">
+			<div class="absolute inset-0 bg-[linear-gradient(to_right,#0A0A0A_0%,#0A0A0A_39.6%,transparent_81.5%)]" aria-hidden="true"></div>
 			<!-- Figma 215:7419: same 131px melt into the page as the other heroes -->
 			<div class="absolute inset-x-0 bottom-0 h-[131px] bg-gradient-to-b from-transparent to-[#0A0A0A]" aria-hidden="true"></div>
 		<?php endif; ?>

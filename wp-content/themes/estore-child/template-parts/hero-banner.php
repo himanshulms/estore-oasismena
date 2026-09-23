@@ -43,8 +43,8 @@ $multi = count( $slides ) > 1;
 
 					<?php if ( $image ) : ?>
 						<img src="<?php echo esc_url( $image ); ?>" alt=""
-							class="absolute inset-y-0 right-0 w-full lg:w-[72%] h-full object-cover object-center" aria-hidden="true">
-						<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] via-[38%] to-transparent" aria-hidden="true"></div>
+							class="absolute inset-y-0 h-full object-cover object-center w-full lg:w-[69.4%] lg:left-[39.6%]" aria-hidden="true">
+						<div class="absolute inset-0 bg-[linear-gradient(to_right,#0A0A0A_0%,#0A0A0A_39.6%,transparent_81.5%)]" aria-hidden="true"></div>
 
 						<!-- Figma 215:6385: a 131px band fading the photo into the page
 						     at the bottom of the hero, so the image melts out instead
