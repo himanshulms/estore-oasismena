@@ -76,6 +76,14 @@ $header-h: 80px;
 }
 
 /* --- Base ------------------------------------------------------------- */
+html {
+    scroll-behavior: smooth;
+
+    @media (prefers-reduced-motion: reduce) {
+        scroll-behavior: auto;
+    }
+}
+
 html,
 body {
     background-color: $ink;
