@@ -345,6 +345,30 @@ img {
   .drawer.is-open {
     transform: translateX(0); }
 
+/* Management portraits. Figma masks each photo with a 200px circle
+   (Ellipse 2, isMask) and lays a grey gradient behind it (Ellipse 3,
+   #69696B -> #5E6060). The backdrop matters because some portraits are
+   transparent cut-outs - without it they'd float on the page background. */
+.team-photo {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #69696b 0%, #5e6060 100%); }
+  .team-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 50%; }
+  @media (max-width: 640px) {
+    .team-photo {
+      width: 150px;
+      height: 150px; } }
+
 /* --- Back to top ------------------------------------------------------ */
 .backtotop {
   position: fixed;

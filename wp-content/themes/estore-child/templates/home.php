@@ -267,8 +267,17 @@ $shop = get_page_by_path( 'products' );
 				<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
 					data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
 					<?php if ( ! empty( $member['member_photo'] ) ) : ?>
-						<img src="<?php echo esc_url( $member['member_photo'] ); ?>" alt="<?php echo esc_attr( $member['member_name'] ?? '' ); ?>"
-							class="w-[180px] h-[180px] rounded-full object-cover shrink-0" loading="lazy">
+						<?php
+						// Figma crops each portrait differently inside the circle, so the
+						// focus point is per-member rather than always centred.
+						$focus = trim( (string) ( $member['member_focus'] ?? '' ) );
+						?>
+						<div class="team-photo">
+							<img src="<?php echo esc_url( $member['member_photo'] ); ?>"
+								alt="<?php echo esc_attr( $member['member_name'] ?? '' ); ?>"
+								<?php echo $focus ? 'style="object-position:center ' . esc_attr( $focus ) . '"' : ''; ?>
+								loading="lazy">
+						</div>
 					<?php endif; ?>
 					<div>
 						<h3 class="text-xl font-bold leading-8"><?php echo esc_html( $member['member_name'] ?? '' ); ?></h3>
