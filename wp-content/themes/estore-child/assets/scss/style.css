@@ -249,6 +249,7 @@ img {
   flex-direction: column;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   overflow: hidden; }
   .product-card__media {
@@ -256,33 +257,60 @@ img {
     display: block;
     height: 249px;
     flex-shrink: 0;
-    background-color: #ffffff; }
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
     .product-card__media img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      padding: 24px; }
+      padding: 35px; }
   .product-card__body {
     padding: 24px;
     display: flex;
     flex-direction: column;
     flex-grow: 1; }
 
-/* Category chip over the white panel: white @ 60%, navy label. */
+/* Category chip on the white panel: 24px tall, radius 12, 0.8px navy outline
+   and a navy 9/600 label. Two of the three in the file carry no fill, so the
+   pill reads as an outline on white. */
 .chip {
   display: inline-flex;
   align-items: center;
   height: 24px;
-  padding: 0 8px;
+  padding: 0 9px;
   border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.6);
+  border: 0.8px solid #133578;
   color: #133578;
   font-size: 0.5625rem;
   font-weight: 600;
   line-height: 14px;
   white-space: nowrap; }
+
+/* Category select: 159x40, radius 10, white @ 5% on a white @ 10% hairline. */
+.cat-select {
+  appearance: none;
+  width: 170px;
+  height: 40px;
+  padding: 0 38px 0 13px;
+  text-overflow: ellipsis;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='white' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center; }
+  .cat-select option {
+    background-color: #161616;
+    color: #ffffff; }
+  .cat-select:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.4);
+    outline-offset: 2px; }
 
 /* Quote button: 38px tall, radius 12, white @ 5% - no border in the file. */
 .btn-quote {
@@ -309,11 +337,32 @@ img {
   color: rgba(255, 255, 255, 0.06);
   user-select: none; }
 
-/* Outlined display text - the blue "AUDIO" / "PRODUCTS" word in the heroes. */
-.outlined {
-  color: transparent;
-  -webkit-text-stroke: 2px #133578;
-  paint-order: stroke fill; }
+/* Outlined display word in a hero ("AUDIO", "PRODUCTS").
+
+   Figma strokes these with strokeAlign: OUTSIDE at 2px. Neither
+   -webkit-text-stroke nor a plain SVG stroke can do that - both centre the
+   stroke, so half of it lands inside the glyph. In a tight concave corner
+   (the crook of an R) the two halves meet and fill in, leaving a wedge.
+
+   So stroke at double width and mask the glyph interior away, which leaves
+   exactly the outer half. See template-parts/outlined-word.php. */
+.outlined-svg {
+  display: block;
+  width: 100%;
+  height: 1em;
+  overflow: visible; }
+  .outlined-svg text {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 0.875em;
+    text-transform: uppercase;
+    fill: none;
+    stroke: #133578;
+    stroke-width: 4;
+    stroke-linejoin: round; }
+  .outlined-svg mask text {
+    fill: #000;
+    stroke: none; }
 
 /* Blurred colour washes. Figma LAYER_BLUR radius maps to CSS blur(radius / 2)
    - verified against node 215:6704, which the Figma API itself reports as

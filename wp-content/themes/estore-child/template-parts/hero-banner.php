@@ -21,7 +21,7 @@ $hero_vars   = $is_home
 		? '--hero-left:26.7%;--hero-width:82.4%;--hero-opaque:31.1%;--hero-clear:55.9%'
 		: '--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%' );
 // Figma: the home hero runs from the 80px header to y=800 before the stats row.
-$height  = $is_home ? 'min-h-[620px] lg:min-h-[667px]' : 'min-h-[300px] lg:min-h-[380px]';
+$height  = 'min-h-[560px] lg:min-h-[667px]';
 
 if ( ! $slides ) {
 	$slides = array( array( 'slide_title' => get_the_title() ) );
@@ -59,7 +59,7 @@ $multi = count( $slides ) > 1;
 					     photo and under the copy, so it goes after the gradient. -->
 					<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
-					<div class="relative shell h-full flex flex-col <?php echo $is_home ? 'lg:justify-start lg:pt-[54px] lg:pb-[44px] justify-center py-14' : 'justify-center py-14'; ?>">
+					<div class="relative shell h-full flex flex-col justify-center py-14 lg:justify-end lg:py-0 lg:pb-[54px]">
 						<div class="max-w-[720px]">
 
 							<?php if ( $eyebrow ) : ?>
@@ -85,7 +85,7 @@ $multi = count( $slides ) > 1;
 								<h1 class="display-hero uppercase" data-aos="fade-up" data-aos-delay="60">
 									<?php echo esc_html( $title ); ?>
 									<?php if ( $accent ) : ?>
-										<span class="outlined accent-word"><?php echo esc_html( $accent ); ?></span>
+										<?php get_template_part( 'template-parts/outlined-word', null, array( 'text' => $accent ) ); ?>
 									<?php endif; ?>
 									<?php echo $tail ? esc_html( $tail ) : ''; ?>
 								</h1>
