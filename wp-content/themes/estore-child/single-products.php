@@ -43,7 +43,7 @@ while ( have_posts() ) :
 	?>
 
 	<!-- Category hero -->
-	<section class="relative overflow-hidden min-h-[380px] lg:min-h-[460px] flex items-center"
+	<section class="relative overflow-hidden min-h-[560px] lg:min-h-[667px] flex items-end"
 		style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%">
 		<?php if ( $hero ) : ?>
 			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="hero-media" aria-hidden="true">
@@ -52,7 +52,7 @@ while ( have_posts() ) :
 		<?php endif; ?>
 		<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
-		<div class="relative shell py-16">
+		<div class="relative shell pb-[54px] pt-16 w-full">
 			<nav class="eyebrow-text mb-[22px] flex items-center gap-2" aria-label="<?php esc_attr_e( 'Breadcrumb', 'estore-child' ); ?>">
 				<?php $shop = get_page_by_path( 'products' ); ?>
 				<a href="<?php echo esc_url( $shop ? get_permalink( $shop ) : home_url( '/products/' ) ); ?>" class="hover:text-white transition-colors">

@@ -426,6 +426,15 @@ img {
 
   .btn:hover {
     transform: none; } }
+/* The swiper and its slides must carry the hero's min-height, or the slide is
+   only as tall as the copy (496px) and the absolutely-positioned photo sizes
+   to that instead of the 667px hero - object-fit: cover then crops the top
+   and bottom off the image. */
+.hero-swiper,
+.hero-swiper .swiper-wrapper,
+.hero-swiper .swiper-slide {
+  min-height: inherit; }
+
 /* Hero photo + scrim. Every page frames its photo differently and fades it at
    a different point, so the four numbers are custom properties the template
    sets per page rather than one shared gradient:
