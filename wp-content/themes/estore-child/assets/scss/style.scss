@@ -20,8 +20,12 @@ $ink: #0a0a0a; // page background
 $panel: #0f0f0f; // section panels, marquee strip
 $surface: #161616; // cards, footer, inputs
 $surface-2: #1f1f1f; // card hover / nested surface
-$accent: #133578; // primary navy blue
+$accent: #133578; // primary navy blue - buttons, outlined display text
 $accent-hi: #1b4699; // hover
+/* A second, brighter blue. It is NOT only a glow: the vision/mission/values
+   icons stroke with it at full opacity and their tiles fill with it at 10%.
+   An earlier census missed it because it appears as a stroke, not a fill. */
+$accent-bright: #2563eb;
 $accent-soft: rgba(19, 53, 120, 0.1); // hero + CTA glow
 $danger: #e84b50; // "MEGA DEAL" pill
 $white: #ffffff;
@@ -33,6 +37,7 @@ $line-faint: rgba(255, 255, 255, 0.05);
 
 $colors: (
     "ink": $ink,
+    "accent-bright": $accent-bright,
     "panel": $panel,
     "surface": $surface,
     "surface-2": $surface-2,
@@ -259,7 +264,7 @@ img {
     font-size: 3.75rem;
     font-weight: 700;
     line-height: 1.07; // 64/60
-    color: #1c1c1c;
+    color: rgba(255, 255, 255, 0.06); // exact Figma fill
     user-select: none;
 }
 
@@ -378,6 +383,26 @@ img {
 
     &.is-open {
         transform: translateX(0);
+    }
+}
+
+/* Vision / mission / values tile: 44x44, radius 12, #2563EB at 10% with a
+   0.8px #2563EB stroke at 20%; the icon strokes #2563EB at full opacity. */
+.pillar-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background-color: rgba(37, 99, 235, 0.1);
+    border: 0.8px solid rgba(37, 99, 235, 0.2);
+    color: $accent-bright;
+
+    svg {
+        width: 22px;
+        height: 22px;
+        stroke-width: 1.375;
     }
 }
 

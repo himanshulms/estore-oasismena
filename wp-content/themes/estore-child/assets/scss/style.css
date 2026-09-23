@@ -15,6 +15,9 @@
    across the Home frame: #989A9F x68, #FFFFFF x64, #133578 x35, #0A0A0A x5,
    #0F0F0F x4. $accent is the Sign-in button, the hero button and the outlined
    "AUDIO" stroke. #2563EB appears only as a 10% glow, never as a solid. */
+/* A second, brighter blue. It is NOT only a glow: the vision/mission/values
+   icons stroke with it at full opacity and their tiles fill with it at 10%.
+   An earlier census missed it because it appears as a stroke, not a fill. */
 .text-ink {
   color: #0a0a0a; }
 
@@ -23,6 +26,15 @@
 
 .border-ink {
   border-color: #0a0a0a; }
+
+.text-accent-bright {
+  color: #2563eb; }
+
+.bg-accent-bright {
+  background-color: #2563eb; }
+
+.border-accent-bright {
+  border-color: #2563eb; }
 
 .text-panel {
   color: #0f0f0f; }
@@ -250,7 +262,7 @@ img {
   font-size: 3.75rem;
   font-weight: 700;
   line-height: 1.07;
-  color: #1c1c1c;
+  color: rgba(255, 255, 255, 0.06);
   user-select: none; }
 
 /* Outlined display text - the blue "AUDIO" / "PRODUCTS" word in the heroes. */
@@ -344,6 +356,23 @@ img {
   z-index: 60; }
   .drawer.is-open {
     transform: translateX(0); }
+
+/* Vision / mission / values tile: 44x44, radius 12, #2563EB at 10% with a
+   0.8px #2563EB stroke at 20%; the icon strokes #2563EB at full opacity. */
+.pillar-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background-color: rgba(37, 99, 235, 0.1);
+  border: 0.8px solid rgba(37, 99, 235, 0.2);
+  color: #2563eb; }
+  .pillar-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.375; }
 
 /* Management portraits. Figma masks each photo with a 200px circle
    (Ellipse 2, isMask) and lays a grey gradient behind it (Ellipse 3,

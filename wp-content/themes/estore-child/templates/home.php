@@ -223,11 +223,11 @@ $shop = get_page_by_path( 'products' );
 				<?php foreach ( $pillars as $i => $pillar ) : ?>
 					<div data-aos="fade-up" data-aos-delay="<?php echo esc_attr( $i * 80 ); ?>">
 						<div class="flex items-center justify-between gap-4">
-							<span class="w-10 h-10 grid place-items-center rounded-[10px] bg-accent/30 border border-accent/50 shrink-0">
+							<span class="pillar-icon">
 								<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
-									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-4 h-4" aria-hidden="true">
+									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-[22px] h-[22px]" aria-hidden="true">
 								<?php else : ?>
-									<svg class="w-4 h-4 text-accent-icon" style="color:#4d7ae0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 										<?php if ( 0 === $i ) : ?>
 											<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" /><circle cx="12" cy="12" r="2.5" />
 										<?php elseif ( 1 === $i ) : ?>
