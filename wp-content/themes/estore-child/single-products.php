@@ -39,7 +39,7 @@ while ( have_posts() ) :
 		}
 	}
 	$thumbs = array_slice( $images, 0, 3 );
-	$hero   = $term ? get_term_meta( $term->term_id, 'category_image', true ) : '';
+	$hero   = $term ? estore_category_hero( $term->term_id ) : '';
 	?>
 
 	<!-- Category hero -->
@@ -53,6 +53,7 @@ while ( have_posts() ) :
 		<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
 		<div class="relative shell hero-copy w-full">
+			<div class="max-w-[673px]">
 			<nav class="eyebrow-text mb-[22px] flex items-center gap-2" aria-label="<?php esc_attr_e( 'Breadcrumb', 'estore-child' ); ?>">
 				<?php $shop = get_page_by_path( 'products' ); ?>
 				<a href="<?php echo esc_url( $shop ? get_permalink( $shop ) : home_url( '/products/' ) ); ?>" class="hover:text-white transition-colors">

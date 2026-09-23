@@ -60,7 +60,7 @@ $multi = count( $slides ) > 1;
 					<div class="glow left-[39%] top-[70px]" aria-hidden="true"></div>
 
 					<div class="relative shell hero-copy flex flex-col justify-center lg:justify-start">
-						<div class="max-w-[720px]">
+						<div class="max-w-[673px]">
 
 							<?php if ( $eyebrow ) : ?>
 								<p class="eyebrow-text flex items-center gap-2.5 mb-[22px]" data-aos="fade-up">

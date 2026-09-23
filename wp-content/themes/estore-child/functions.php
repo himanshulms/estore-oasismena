@@ -177,6 +177,12 @@ function estore_label( $key, $default ) {
 	return $value ?: $default;
 }
 
+/** Wide hero image for a category, falling back to the square band image. */
+function estore_category_hero( $term_id ) {
+	$hero = trim( (string) get_term_meta( $term_id, 'category_hero_image', true ) );
+	return $hero ?: (string) get_term_meta( $term_id, 'category_image', true );
+}
+
 function estore_quote_url( $product_id = 0 ) {
 	$contact = get_page_by_path( 'contact' );
 	$url     = $contact ? get_permalink( $contact ) : home_url( '/contact/' );
@@ -196,8 +202,9 @@ function estore_quote_url( $product_id = 0 ) {
  * ---------------------------------------------------------------------- */
 function estore_term_fields() {
 	return array(
-		'category_image' => array( 'image', __( 'Category Image', 'estore-child' ), __( 'Used by the zig-zag band on the home page and the category hero.', 'estore-child' ) ),
-		'category_badge' => array( 'text',  __( 'Category Badge', 'estore-child' ), __( 'Small pill over the image, e.g. FEATURED. Leave blank to hide.', 'estore-child' ) ),
+		'category_image'      => array( 'image', __( 'Category Image', 'estore-child' ), __( 'Square image for the zig-zag band on the home page.', 'estore-child' ) ),
+		'category_hero_image' => array( 'image', __( 'Category Hero Image', 'estore-child' ), __( 'Wide 3:2 image for the product detail and category archive heroes. Falls back to the Category Image, which is square and will crop.', 'estore-child' ) ),
+		'category_badge'      => array( 'text',  __( 'Category Badge', 'estore-child' ), __( 'Small pill over the image, e.g. FEATURED. Leave blank to hide.', 'estore-child' ) ),
 	);
 }
 

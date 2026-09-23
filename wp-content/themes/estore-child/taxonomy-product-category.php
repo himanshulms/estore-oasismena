@@ -5,7 +5,7 @@
  */
 get_header();
 $term  = get_queried_object();
-$image = $term ? get_term_meta( $term->term_id, 'category_image', true ) : '';
+$image = $term ? estore_category_hero( $term->term_id ) : '';
 ?>
 
 <section class="relative overflow-hidden min-h-[280px] lg:min-h-[340px] flex items-center">
