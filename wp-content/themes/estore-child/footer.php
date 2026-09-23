@@ -105,9 +105,9 @@ $contact     = get_page_by_path( 'contact' );
 				<h2 class="text-xs font-semibold mb-5"><?php esc_html_e( 'Quick Links', 'estore-child' ); ?></h2>
 				<?php
 				// The design lists the product categories here.
-				$cats = get_terms( array( 'taxonomy' => 'product-category', 'hide_empty' => false, 'number' => 5 ) );
+				$cats = array_slice( estore_top_categories(), 0, 5 );
 				?>
-				<?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
+				<?php if ( $cats ) : ?>
 					<ul class="flex flex-col gap-3 text-sm text-muted">
 						<?php foreach ( $cats as $cat ) : ?>
 							<li><a href="<?php echo esc_url( get_term_link( $cat ) ); ?>" class="hover:text-white transition-colors"><?php echo esc_html( $cat->name ); ?></a></li>

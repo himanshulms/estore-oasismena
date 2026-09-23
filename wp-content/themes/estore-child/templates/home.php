@@ -50,13 +50,10 @@ $get = function ( $key ) {
 
 <?php /* --- Explore categories: alternating image / detail bands --- */ ?>
 <?php
-$cats = get_terms( array(
-	'taxonomy'   => 'product-category',
-	'hide_empty' => false,
-	'orderby'    => 'term_order',
-) );
+// Top-level categories only - the brands beneath them are listed inside each band.
+$cats = estore_top_categories();
 ?>
-<?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
+<?php if ( $cats ) : ?>
 <section class="py-14 lg:py-[60px]">
 	<div class="shell">
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12">

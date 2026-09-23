@@ -9,8 +9,9 @@
  */
 $product_id = get_the_ID();
 $subtitle   = function_exists( 'cfs' ) ? cfs()->get( 'product_subtitle', $product_id ) : '';
-$terms      = get_the_terms( $product_id, 'product-category' );
-$chip       = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
+// Products are filed under a brand, but the chip names the category it sits in.
+$category   = estore_product_category( $product_id );
+$chip       = $category ? $category->name : '';
 ?>
 <article class="product-card" data-aos="fade-up">
 

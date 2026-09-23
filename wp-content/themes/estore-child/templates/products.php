@@ -9,7 +9,7 @@
  */
 get_header();
 
-$cats    = get_terms( array( 'taxonomy' => 'product-category', 'hide_empty' => false ) );
+$cats    = estore_top_categories();
 $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 ?>
 
@@ -29,7 +29,7 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 				<h2 class="display uppercase"><?php echo esc_html( $heading ?: estore_label( 'catalogue_heading', __( 'Explore Products', 'estore-child' ) ) ); ?></h2>
 			</div>
 
-			<?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
+			<?php if ( $cats ) : ?>
 				<form method="get" action="<?php echo esc_url( get_permalink() ); ?>" class="shrink-0" id="product-filter"
 					data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
 					data-nonce="<?php echo esc_attr( wp_create_nonce( 'estore_products' ) ); ?>">
@@ -40,6 +40,12 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 							<option value="<?php echo esc_attr( $cat->term_id ); ?>" <?php selected( $current, $cat->term_id ); ?>>
 								<?php echo esc_html( $cat->name ); ?>
 							</option>
+							<?php // Brands sit under their category, prefixed the way wp-admin shows them. ?>
+							<?php foreach ( estore_category_brands( $cat->term_id ) as $brand ) : ?>
+								<option value="<?php echo esc_attr( $brand->term_id ); ?>" <?php selected( $current, $brand->term_id ); ?>>
+									&nbsp;&nbsp;&mdash; <?php echo esc_html( $brand->name ); ?>
+								</option>
+							<?php endforeach; ?>
 						<?php endforeach; ?>
 					</select>
 					<noscript><button type="submit" class="btn btn--ghost ml-2"><?php esc_html_e( 'Filter', 'estore-child' ); ?></button></noscript>

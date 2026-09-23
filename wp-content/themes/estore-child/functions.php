@@ -177,6 +177,62 @@ function estore_label( $key, $default ) {
 	return $value ?: $default;
 }
 
+/**
+ * product-category is hierarchical: three top-level categories, each with its
+ * brands as child terms. Most of the UI wants the categories only.
+ */
+function estore_top_categories() {
+	$terms = get_terms( array(
+		'taxonomy'   => 'product-category',
+		'hide_empty' => false,
+		'parent'     => 0,
+	) );
+	return ( $terms && ! is_wp_error( $terms ) ) ? $terms : array();
+}
+
+/** The brands filed under one category. */
+function estore_category_brands( $term_id ) {
+	$terms = get_terms( array(
+		'taxonomy'   => 'product-category',
+		'hide_empty' => false,
+		'parent'     => (int) $term_id,
+	) );
+	return ( $terms && ! is_wp_error( $terms ) ) ? $terms : array();
+}
+
+/**
+ * A product is filed under a brand, so walk up to the category it belongs to.
+ * Falls back to the term itself when a product is filed directly on a category.
+ */
+function estore_product_category( $product_id ) {
+	$terms = get_the_terms( $product_id, 'product-category' );
+	if ( ! $terms || is_wp_error( $terms ) ) {
+		return null;
+	}
+	foreach ( $terms as $term ) {
+		if ( 0 === (int) $term->parent ) {
+			return $term;
+		}
+	}
+	$first  = reset( $terms );
+	$parent = $first->parent ? get_term( $first->parent, 'product-category' ) : $first;
+	return ( $parent && ! is_wp_error( $parent ) ) ? $parent : $first;
+}
+
+/** The brand a product is filed under, if any. */
+function estore_product_brand( $product_id ) {
+	$terms = get_the_terms( $product_id, 'product-category' );
+	if ( ! $terms || is_wp_error( $terms ) ) {
+		return null;
+	}
+	foreach ( $terms as $term ) {
+		if ( (int) $term->parent > 0 ) {
+			return $term;
+		}
+	}
+	return null;
+}
+
 /** Wide hero image for a category, falling back to the square band image. */
 function estore_category_hero( $term_id ) {
 	$hero = trim( (string) get_term_meta( $term_id, 'category_hero_image', true ) );
