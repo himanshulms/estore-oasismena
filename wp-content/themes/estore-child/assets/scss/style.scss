@@ -198,7 +198,7 @@ img {
     &--primary {
         background-color: $accent;
         color: $white;
-        box-shadow: 0 0 24px rgba(19, 53, 120, 0.55);
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.35); // Figma DROP_SHADOW
 
         &:hover {
             background-color: $accent-hi;
@@ -226,9 +226,9 @@ img {
         content: "";
         position: absolute;
         left: 0;
-        bottom: -6px;
+        bottom: -5px;
         height: 1px;
-        background-color: $accent;
+        background-color: $white; // Figma 230:8020
         transition: width 0.25s ease;
     }
 }
@@ -268,7 +268,7 @@ img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 35px; // image sits 35px inside the 395x249 panel
+            padding: 35px 35px 44px; // image sits 35px in, 43/44px down
         }
     }
 
@@ -277,6 +277,12 @@ img {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+    }
+
+    // 24px above the button, fixed. Using margin-top:auto instead lets the
+    // gap grow whenever a card is shorter than its row.
+    &__cta {
+        margin-top: 24px;
     }
 }
 
@@ -314,8 +320,10 @@ img {
     font-size: 1rem; // 16/600
     font-weight: 600;
     cursor: pointer;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='white' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    // Figma 215:6961: a 12x8 chevron, 1.875 stroke, white.
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
+    background-size: 12px 8px;
     background-position: right 13px center;
 
     option {

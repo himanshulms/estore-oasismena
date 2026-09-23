@@ -16,7 +16,7 @@ $chip       = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
 
 	<a href="<?php the_permalink(); ?>" class="product-card__media">
 		<?php if ( $chip ) : ?>
-			<span class="chip absolute top-6 right-6 z-10"><?php echo esc_html( $chip ); ?></span>
+			<span class="chip absolute top-[25px] right-[25px] z-10"><?php echo esc_html( $chip ); ?></span>
 		<?php endif; ?>
 
 		<?php if ( has_post_thumbnail() ) : ?>
@@ -38,7 +38,7 @@ $chip       = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
 			<p class="text-xs text-muted leading-4 mt-[5px]"><?php echo esc_html( $subtitle ); ?></p>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( estore_quote_url( $product_id ) ); ?>" class="btn-quote mt-auto">
+		<a href="<?php echo esc_url( estore_quote_url( $product_id ) ); ?>" class="btn-quote product-card__cta">
 			<?php echo esc_html( estore_quote_label() ); ?>
 		</a>
 	</div>

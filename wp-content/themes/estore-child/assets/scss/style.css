@@ -211,7 +211,7 @@ img {
   .btn--primary {
     background-color: #133578;
     color: #ffffff;
-    box-shadow: 0 0 24px rgba(19, 53, 120, 0.55); }
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.35); }
     .btn--primary:hover {
       background-color: #1b4699; }
   .btn--ghost {
@@ -230,9 +230,9 @@ img {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -6px;
+    bottom: -5px;
     height: 1px;
-    background-color: #133578;
+    background-color: #ffffff;
     transition: width 0.25s ease; }
 
 .card {
@@ -265,12 +265,14 @@ img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      padding: 35px; }
+      padding: 35px 35px 44px; }
   .product-card__body {
     padding: 24px;
     display: flex;
     flex-direction: column;
     flex-grow: 1; }
+  .product-card__cta {
+    margin-top: 24px; }
 
 /* Category chip on the white panel: 24px tall, radius 12, 0.8px navy outline
    and a navy 9/600 label. Two of the three in the file carry no fill, so the
@@ -302,8 +304,9 @@ img {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='white' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
+  background-size: 12px 8px;
   background-position: right 13px center; }
   .cat-select option {
     background-color: #161616;

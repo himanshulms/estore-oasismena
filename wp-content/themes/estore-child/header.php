@@ -39,7 +39,7 @@
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center shrink-0">
 			<?php $logo = get_theme_mod( 'header_logo' ); ?>
 			<?php if ( $logo ) : ?>
-				<img src="<?php echo esc_url( $logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-8 w-auto">
+				<img src="<?php echo esc_url( $logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-[37px] w-auto">
 			<?php else : ?>
 				<span class="text-lg font-semibold tracking-tight"><?php bloginfo( 'name' ); ?></span>
 			<?php endif; ?>
@@ -50,7 +50,7 @@
 			wp_nav_menu( array(
 				'theme_location' => 'main-menu',
 				'container'      => false,
-				'menu_class'     => 'flex items-center gap-8',
+				'menu_class'     => 'flex items-center gap-6',
 				'walker'         => new Estore_Nav_Walker(),
 				'fallback_cb'    => false,
 			) );
@@ -64,8 +64,9 @@
 			$account = get_page_by_path( 'account' );
 			$sign_in = $account ? get_permalink( $account ) : wp_login_url( home_url( '/' ) );
 			?>
-			<a href="<?php echo esc_url( $sign_in ); ?>" class="btn btn--primary hidden sm:inline-flex !py-2.5 !px-5 text-sm">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+			<!-- Figma 215:6910: 92x33, radius 8, #133578, 12/600 label, 16px icon -->
+			<a href="<?php echo esc_url( $sign_in ); ?>" class="btn btn--primary hidden sm:inline-flex !h-[33px] !px-3.5 !gap-2 !text-xs !font-semibold">
+				<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 1115 0" />
 				</svg>
 				<?php esc_html_e( 'Sign in', 'estore-child' ); ?>
