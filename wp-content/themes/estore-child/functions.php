@@ -81,6 +81,14 @@ function estore_customize_register( $wp_customize ) {
 	) );
 
 	$fields = array(
+		// Repeated product-page labels, so wording is editable without code.
+		'quote_label'        => array( 'text',     __( 'Quote Button Label', 'estore-child' ) ),
+		'description_label'  => array( 'text',     __( 'Product "Description:" Label', 'estore-child' ) ),
+		'related_eyebrow'    => array( 'text',     __( 'Related Products Eyebrow', 'estore-child' ) ),
+		'related_heading'    => array( 'text',     __( 'Related Products Heading', 'estore-child' ) ),
+		'catalogue_eyebrow'  => array( 'text',     __( 'Products Page Eyebrow', 'estore-child' ) ),
+		'catalogue_heading'  => array( 'text',     __( 'Products Page Heading', 'estore-child' ) ),
+		'all_categories'     => array( 'text',     __( 'All-Categories Option Label', 'estore-child' ) ),
 		'header_logo'        => array( 'image',    __( 'Header Logo', 'estore-child' ) ),
 		'footer_logo'        => array( 'image',    __( 'Footer Logo', 'estore-child' ) ),
 		'footer_description' => array( 'textarea', __( 'Footer Description', 'estore-child' ) ),
@@ -157,6 +165,18 @@ class Estore_Nav_Walker extends Walker_Nav_Menu {
  * Quote". That is a contact form prefilled with the product, not commerce, so
  * there is deliberately no WooCommerce in this project.
  * ---------------------------------------------------------------------- */
+/** Editable label for every "Request a Quote" control. */
+function estore_quote_label() {
+	$label = trim( (string) get_theme_mod( 'quote_label' ) );
+	return $label ?: __( 'Request a Quote', 'estore-child' );
+}
+
+/** Small helper so templates can read a Customizer label with a fallback. */
+function estore_label( $key, $default ) {
+	$value = trim( (string) get_theme_mod( $key ) );
+	return $value ?: $default;
+}
+
 function estore_quote_url( $product_id = 0 ) {
 	$contact = get_page_by_path( 'contact' );
 	$url     = $contact ? get_permalink( $contact ) : home_url( '/contact/' );

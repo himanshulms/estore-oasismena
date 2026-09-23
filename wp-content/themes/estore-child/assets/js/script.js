@@ -126,7 +126,8 @@
                 thumbs.forEach(function (t) {
                     var on = t === btn;
                     t.setAttribute('aria-selected', on ? 'true' : 'false');
-                    t.classList.toggle('border-white/25', on);
+                    t.classList.toggle('ring-2', on);
+                    t.classList.toggle('ring-white/40', on);
                 });
             });
         });
