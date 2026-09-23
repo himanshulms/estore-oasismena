@@ -21,11 +21,11 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 		<div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
 			<div>
 				<?php if ( function_exists( 'cfs' ) && cfs()->get( 'products_eyebrow' ) ) : ?>
-					<p class="eyebrow-text text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php echo esc_html( cfs()->get( 'products_eyebrow' ) ); ?></p>
+					<p class="eyebrow-text mb-[10px]"><?php echo esc_html( cfs()->get( 'products_eyebrow' ) ); ?></p>
 				<?php else : ?>
-					<p class="text-xs tracking-[0.18em] uppercase text-muted mb-5"><?php esc_html_e( 'Product Catalogue', 'estore-child' ); ?></p>
+					<p class="eyebrow-text mb-[10px]"><?php esc_html_e( 'Product Catalogue', 'estore-child' ); ?></p>
 				<?php endif; ?>
-				<h2 class="display uppercase"><?php esc_html_e( 'Explore Products', 'estore-child' ); ?></h2>
+				<h2 class="display uppercase max-w-[420px]"><?php esc_html_e( 'Explore Products', 'estore-child' ); ?></h2>
 			</div>
 
 			<?php if ( $cats && ! is_wp_error( $cats ) ) : ?>
@@ -34,7 +34,7 @@ $current = isset( $_GET['category'] ) ? absint( $_GET['category'] ) : 0;
 					data-nonce="<?php echo esc_attr( wp_create_nonce( 'estore_products' ) ); ?>">
 					<label for="category" class="sr-only"><?php esc_html_e( 'Filter by category', 'estore-child' ); ?></label>
 					<select name="category" id="category"
-						class="appearance-none bg-surface border border-white/15 rounded-lg pl-5 pr-11 py-3 text-sm font-medium cursor-pointer
+						class="appearance-none bg-surface border border-white/15 rounded-lg pl-5 pr-11 py-3 text-base font-semibold cursor-pointer
 						       bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22white%22 viewBox=%220 0 20 20%22><path d=%22M5 7l5 5 5-5z%22/></svg>')] bg-no-repeat bg-[right_1rem_center] bg-[length:14px]">
 						<option value="0"><?php esc_html_e( 'All Categories', 'estore-child' ); ?></option>
 						<?php foreach ( $cats as $cat ) : ?>

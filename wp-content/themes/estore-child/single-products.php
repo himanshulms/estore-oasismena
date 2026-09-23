@@ -43,15 +43,17 @@ while ( have_posts() ) :
 
 	<!-- Category hero -->
 	<?php $hero = $term ? get_term_meta( $term->term_id, 'category_image', true ) : ''; ?>
-	<section class="relative overflow-hidden min-h-[280px] lg:min-h-[340px] flex items-center">
+	<section class="relative overflow-hidden min-h-[380px] lg:min-h-[460px] flex items-center">
 		<?php if ( $hero ) : ?>
-			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true">
-			<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-[#0A0A0A]/30" aria-hidden="true"></div>
+			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="absolute inset-y-0 right-0 w-full lg:w-[72%] h-full object-cover" aria-hidden="true">
+			<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A] via-[38%] to-transparent" aria-hidden="true"></div>
+			<!-- Figma 215:7419: same 131px melt into the page as the other heroes -->
+			<div class="absolute inset-x-0 bottom-0 h-[131px] bg-gradient-to-b from-transparent to-[#0A0A0A]" aria-hidden="true"></div>
 		<?php endif; ?>
 		<div class="glow right-[8%] top-[10%]" aria-hidden="true"></div>
 
 		<div class="relative shell py-16">
-			<nav class="text-xs text-muted mb-5" aria-label="<?php esc_attr_e( 'Breadcrumb', 'estore-child' ); ?>">
+			<nav class="eyebrow-text mb-[22px]" aria-label="<?php esc_attr_e( 'Breadcrumb', 'estore-child' ); ?>">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-white transition-colors"><?php esc_html_e( 'Home', 'estore-child' ); ?></a>
 				<span class="mx-2" aria-hidden="true">&middot;</span>
 				<?php if ( $term ) : ?>
@@ -60,40 +62,40 @@ while ( have_posts() ) :
 				<?php endif; ?>
 				<span class="text-white"><?php the_title(); ?></span>
 			</nav>
-			<h1 class="display uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
+			<h1 class="display-hero uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
 		</div>
 	</section>
 
 	<section class="py-16 lg:py-20">
-		<div class="shell grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
+		<div class="shell grid grid-cols-1 lg:grid-cols-[672fr_508fr] gap-10 lg:gap-[60px]">
 
-			<!-- Gallery -->
-			<div class="flex flex-col-reverse sm:flex-row gap-4">
+			<!-- Gallery: 500x504 panel + a 160px thumbnail rail, 12px apart -->
+			<div class="flex flex-col-reverse sm:flex-row gap-3">
+				<div class="card grow grid place-items-center lg:h-[504px] aspect-[500/504] sm:aspect-auto p-8 bg-white">
+					<?php if ( $images ) : ?>
+						<img src="<?php echo esc_url( $images[0] ); ?>" alt="<?php the_title_attribute(); ?>"
+							class="max-h-full max-w-full w-auto object-contain" id="gallery-main">
+					<?php else : ?>
+						<span class="text-[#9AA0AE] text-sm"><?php esc_html_e( 'No image', 'estore-child' ); ?></span>
+					<?php endif; ?>
+				</div>
+
 				<?php if ( count( $images ) > 1 ) : ?>
-					<div class="flex sm:flex-col gap-4 sm:w-[22%] shrink-0" role="tablist" aria-label="<?php esc_attr_e( 'Product images', 'estore-child' ); ?>">
+					<div class="flex sm:flex-col gap-3 sm:w-[160px] shrink-0" role="tablist" aria-label="<?php esc_attr_e( 'Product images', 'estore-child' ); ?>">
 						<?php foreach ( $images as $i => $src ) : ?>
 							<button type="button" role="tab" aria-selected="<?php echo $i ? 'false' : 'true'; ?>"
-								class="gallery-thumb card grid place-items-center aspect-square p-2 <?php echo $i ? '' : 'border-white/25'; ?>"
+								class="gallery-thumb card grid place-items-center w-full aspect-square p-3 bg-white <?php echo $i ? '' : 'border-white/25'; ?>"
 								data-full="<?php echo esc_url( $src ); ?>">
-								<img src="<?php echo esc_url( $src ); ?>" alt="" class="max-h-full w-auto object-contain" loading="lazy">
+								<img src="<?php echo esc_url( $src ); ?>" alt="" class="max-h-full max-w-full object-contain" loading="lazy">
 							</button>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
-
-				<div class="card grow grid place-items-center aspect-[4/3] p-8">
-					<?php if ( $images ) : ?>
-						<img src="<?php echo esc_url( $images[0] ); ?>" alt="<?php the_title_attribute(); ?>"
-							class="max-h-full w-auto object-contain" id="gallery-main">
-					<?php else : ?>
-						<span class="text-faint text-sm"><?php esc_html_e( 'No image', 'estore-child' ); ?></span>
-					<?php endif; ?>
-				</div>
 			</div>
 
 			<!-- Detail column -->
 			<div>
-				<h2 class="text-4xl lg:text-[44px] font-bold tracking-tight"><?php the_title(); ?></h2>
+				<h2 class="display"><?php the_title(); ?></h2>
 
 				<?php if ( $subtitle ) : ?>
 					<p class="text-lg font-semibold uppercase mt-3"><?php echo esc_html( $subtitle ); ?></p>

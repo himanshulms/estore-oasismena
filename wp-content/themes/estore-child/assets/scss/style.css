@@ -135,9 +135,12 @@ img {
   line-height: 1.375;
   letter-spacing: -0.02em;
   font-weight: 700; }
-  .display-hero .accent-word {
-    font-size: 0.875em;
-    display: block; }
+
+/* The outlined word sits on its own line at 70px against the 80px heading
+   ("Redefine your / AUDIO / Experience", "e-store / Products"). */
+.accent-word {
+  font-size: 0.875em;
+  display: block; }
 
 .display {
   font-size: clamp(2.25rem, 1.2rem + 4.2vw, 3.75rem);
@@ -415,9 +418,9 @@ img {
 /* Label / value rows in the product specification table. */
 .spec-row {
   display: grid;
-  grid-template-columns: minmax(140px, 240px) 1fr;
+  grid-template-columns: minmax(160px, 324px) 1fr;
   gap: 16px;
-  padding: 6px 0; }
+  padding: 0 0 17px; }
   .spec-row dt {
     color: #989a9f; }
   .spec-row dd {

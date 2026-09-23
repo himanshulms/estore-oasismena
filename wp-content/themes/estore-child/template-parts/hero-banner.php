@@ -61,13 +61,25 @@ $multi = count( $slides ) > 1;
 
 							<?php if ( $eyebrow ) : ?>
 								<p class="eyebrow-text flex items-center gap-2.5 mb-[22px]" data-aos="fade-up">
-									<span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
-									<?php echo esc_html( $eyebrow ); ?>
+									<?php if ( $is_home ) : ?>
+										<span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+										<?php echo esc_html( $eyebrow ); ?>
+									<?php else : ?>
+										<?php
+										// Inner pages show it as a breadcrumb: "e-store / Products".
+										$crumbs = array_map( 'trim', explode( '/', $eyebrow ) );
+										$last   = count( $crumbs ) - 1;
+										?>
+										<?php foreach ( $crumbs as $i => $crumb ) : ?>
+											<span class="<?php echo $i === $last ? 'text-white' : ''; ?>"><?php echo esc_html( $crumb ); ?></span>
+											<?php if ( $i !== $last ) : ?><span aria-hidden="true">/</span><?php endif; ?>
+										<?php endforeach; ?>
+									<?php endif; ?>
 								</p>
 							<?php endif; ?>
 
 							<?php if ( $title || $accent ) : ?>
-								<h1 class="<?php echo $is_home ? 'display-hero' : 'display'; ?> uppercase" data-aos="fade-up" data-aos-delay="60">
+								<h1 class="display-hero uppercase" data-aos="fade-up" data-aos-delay="60">
 									<?php echo esc_html( $title ); ?>
 									<?php if ( $accent ) : ?>
 										<span class="outlined accent-word"><?php echo esc_html( $accent ); ?></span>

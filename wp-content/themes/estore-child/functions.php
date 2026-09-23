@@ -273,7 +273,7 @@ function estore_render_product_grid( $term_id = 0, $limit = -1, $exclude = 0 ) {
 		'post_type'      => 'products',
 		'post_status'    => 'publish',
 		'posts_per_page' => $limit,
-		'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'DESC' ),
+		'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
 	);
 
 	if ( $term_id ) {
