@@ -98,6 +98,9 @@ $multi = count( $slides ) > 1;
 								</div>
 							<?php endif; ?>
 
+							<?php // Skip the row entirely when neither button has a label, or its
+							      // 60px top margin leaves a gap under the copy. ?>
+							<?php if ( ! empty( $slide['slide_cta_label'] ) || ! empty( $slide['slide_link_label'] ) ) : ?>
 							<div class="flex flex-wrap items-center gap-6 mt-[60px]" data-aos="fade-up" data-aos-delay="180">
 								<?php if ( ! empty( $slide['slide_cta_label'] ) ) : ?>
 									<a href="<?php echo esc_url( $slide['slide_cta_url'] ?? '#' ); ?>" class="btn btn--primary">
@@ -119,6 +122,7 @@ $multi = count( $slides ) > 1;
 									</a>
 								<?php endif; ?>
 							</div>
+							<?php endif; ?>
 						</div>
 					</div>
 				</div>
