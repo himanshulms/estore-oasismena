@@ -64,8 +64,9 @@ while ( have_posts() ) :
 			<h1 class="display-hero uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
 
 			<?php
-			// Figma 215:7428 / 215:7432. Sourced from the Products page hero so
-			// an editor changes this copy in one place.
+			// Figma 215:7428. The hero copy is sourced from the Products page
+			// hero so an editor changes it in one place. The CTA pair the file
+			// also shows here is deliberately omitted - see CLAUDE.md.
 			$shop_page = get_page_by_path( 'products' );
 			$shop_hero = ( $shop_page && function_exists( 'cfs' ) ) ? (array) cfs()->get( 'hero_slider', $shop_page->ID ) : array();
 			$shop_hero = $shop_hero[0] ?? array();
@@ -78,22 +79,6 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 
-			<div class="flex flex-wrap items-center gap-6 mt-[60px]">
-				<a href="<?php echo esc_url( $shop_page ? get_permalink( $shop_page ) : home_url( '/products/' ) ); ?>" class="btn btn--primary">
-					<?php echo esc_html( estore_label( 'catalogue_heading', __( 'Explore Products', 'estore-child' ) ) ); ?>
-					<span class="w-6 h-6 grid place-items-center rounded-full border border-white/30">
-						<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9" />
-						</svg>
-					</span>
-				</a>
-				<a href="<?php echo esc_url( estore_quote_url( $id ) ); ?>" class="btn btn--ghost">
-					<?php echo esc_html( estore_quote_label() ); ?>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-					</svg>
-				</a>
-			</div>
 		</div>
 	</section>
 
