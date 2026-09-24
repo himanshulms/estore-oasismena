@@ -635,6 +635,128 @@ img {
     }
 }
 
+/* Category filter.
+   A native <select> paints its option list with the OS, so it cannot follow
+   this palette. The select stays in the markup and keeps working without
+   JavaScript; script.js mirrors it into the listbox below and hides it. */
+.cat-dropdown {
+    position: relative;
+    width: 170px;
+
+    &__toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
+        height: 40px;
+        padding: 0 13px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: $white;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        &[aria-expanded="true"] {
+            border-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        svg {
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        &[aria-expanded="true"] svg {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__panel {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 40;
+        min-width: 300px;   // long category names fit on one line
+        max-height: 360px;
+        overflow-y: auto;
+        padding: 8px;
+        margin: 0;
+        list-style: none;
+        border-radius: 12px;
+        background-color: $surface;
+        border: 1px solid $line;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    // Top-level categories read as the primary rows; brands sit beneath them,
+    // quieter and indented, the same relationship the cards and bands use.
+    &__option {
+        display: block;
+        width: 100%;
+        padding: 9px 12px;
+        border-radius: 8px;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.35;
+        color: $white;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        &:hover,
+        &.is-active,
+        &:focus-visible {
+            background-color: rgba(255, 255, 255, 0.07);
+            outline: none;
+        }
+
+        &[aria-selected="true"] {
+            background-color: rgba(19, 53, 120, 0.4);
+            color: $white;
+            font-weight: 600;
+        }
+
+        &--child {
+            padding-left: 26px;
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: $muted;
+
+            &::before {
+                content: "\2014";
+                margin-right: 8px;
+                color: $faint;
+            }
+
+            &:hover,
+            &.is-active,
+            &[aria-selected="true"] {
+                color: $white;
+            }
+        }
+    }
+}
+
 /* Request a Quote dialog. The old site's popup is white; this keeps its
    fields and two-column layout but in the dark palette, so it belongs to
    this design rather than fighting it. */

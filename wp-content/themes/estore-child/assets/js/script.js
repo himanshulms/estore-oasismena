@@ -15,6 +15,7 @@
         initSwipers();
         initGallery();
         initQuoteModal();
+        initCategoryDropdown();
         initAOS();
     });
 
@@ -197,6 +198,114 @@
 
         // Close once CF7 reports the message was sent.
         document.addEventListener('wpcf7mailsent', function () { setTimeout(close, 1600); });
+    }
+
+    /* Replace the native category <select> with a styled listbox. The select
+       stays in the DOM and remains the source of truth, so the existing AJAX
+       filter keeps listening to its change event and the no-JS form still
+       submits. */
+    function initCategoryDropdown() {
+        var select = document.querySelector('.cat-select');
+        if (!select || select.dataset.enhanced) return;
+        select.dataset.enhanced = '1';
+
+        var wrap = document.createElement('div');
+        wrap.className = 'cat-dropdown';
+
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'cat-dropdown__toggle';
+        toggle.setAttribute('aria-haspopup', 'listbox');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.innerHTML = '<span class="cat-dropdown__label"></span>' +
+            '<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M1 1L6 7L11 1"/></svg>';
+
+        var panel = document.createElement('ul');
+        panel.className = 'cat-dropdown__panel';
+        panel.setAttribute('role', 'listbox');
+        panel.hidden = true;
+
+        var options = [];
+        Array.prototype.forEach.call(select.options, function (opt, i) {
+            var li = document.createElement('li');
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            // The server indents brands with a dash; detect and restyle rather
+            // than re-deriving the hierarchy here.
+            var raw = opt.textContent.replace(/\u00a0/g, ' ').trim();
+            var child = /^[\u2014-]\s/.test(raw);
+            btn.className = 'cat-dropdown__option' + (child ? ' cat-dropdown__option--child' : '');
+            btn.textContent = child ? raw.replace(/^[\u2014-]\s*/, '') : raw;
+            btn.setAttribute('role', 'option');
+            btn.dataset.index = i;
+            btn.setAttribute('aria-selected', opt.selected ? 'true' : 'false');
+            li.appendChild(btn);
+            panel.appendChild(li);
+            options.push(btn);
+        });
+
+        function label() {
+            var o = select.options[select.selectedIndex];
+            wrap.querySelector('.cat-dropdown__label').textContent =
+                o ? o.textContent.replace(/\u00a0/g, ' ').replace(/^[\u2014-]\s*/, '').trim() : '';
+            options.forEach(function (b, i) {
+                b.setAttribute('aria-selected', i === select.selectedIndex ? 'true' : 'false');
+            });
+        }
+
+        function open() {
+            panel.hidden = false;
+            toggle.setAttribute('aria-expanded', 'true');
+            var cur = options[select.selectedIndex];
+            if (cur) cur.classList.add('is-active');
+        }
+        function close() {
+            panel.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+            options.forEach(function (b) { b.classList.remove('is-active'); });
+        }
+
+        toggle.addEventListener('click', function () {
+            panel.hidden ? open() : close();
+        });
+
+        panel.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cat-dropdown__option');
+            if (!btn) return;
+            select.selectedIndex = parseInt(btn.dataset.index, 10);
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            label();
+            close();
+            toggle.focus();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!wrap.contains(e.target)) close();
+        });
+
+        wrap.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !panel.hidden) { close(); toggle.focus(); return; }
+            if (panel.hidden) {
+                if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); options[select.selectedIndex].focus(); }
+                return;
+            }
+            var idx = options.indexOf(document.activeElement);
+            if (e.key === 'ArrowDown') { e.preventDefault(); (options[idx + 1] || options[0]).focus(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); (options[idx - 1] || options[options.length - 1]).focus(); }
+            else if (e.key === 'Home') { e.preventDefault(); options[0].focus(); }
+            else if (e.key === 'End') { e.preventDefault(); options[options.length - 1].focus(); }
+        });
+
+        select.parentNode.insertBefore(wrap, select);
+        wrap.appendChild(toggle);
+        wrap.appendChild(panel);
+        wrap.appendChild(select);
+        select.classList.add('sr-only');
+        select.setAttribute('tabindex', '-1');
+        select.setAttribute('aria-hidden', 'true');
+        label();
     }
 
     function initAOS() {
