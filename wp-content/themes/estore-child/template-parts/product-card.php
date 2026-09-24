@@ -39,7 +39,9 @@ $chip       = $category ? $category->name : '';
 			<p class="text-xs text-muted leading-4 mt-[5px]"><?php echo esc_html( $subtitle ); ?></p>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( estore_quote_url( $product_id ) ); ?>" class="btn-quote product-card__cta">
+		<a href="<?php echo esc_url( estore_quote_url( $product_id ) ); ?>" class="btn-quote product-card__cta"
+			data-quote-product="<?php echo esc_attr( get_the_title() ); ?>"
+			data-quote-category="<?php echo esc_attr( $chip ); ?>">
 			<?php echo esc_html( estore_quote_label() ); ?>
 		</a>
 	</div>

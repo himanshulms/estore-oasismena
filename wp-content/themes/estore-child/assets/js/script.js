@@ -14,6 +14,7 @@
         initBackToTop();
         initSwipers();
         initGallery();
+        initQuoteModal();
         initAOS();
     });
 
@@ -131,6 +132,71 @@
                 });
             });
         });
+    }
+
+    /* Request a Quote dialog. Intercepts the quote buttons, prefills the
+       product and category, and restores focus on close. The buttons keep a
+       real href to the contact page, so this is an enhancement, not a
+       dependency. */
+    function initQuoteModal() {
+        var modal = document.getElementById('quote-modal');
+        if (!modal) return;
+
+        var panel = modal.querySelector('.quote-modal__panel');
+        var opener = null;
+
+        function setField(name, value) {
+            var el = modal.querySelector('[name="' + name + '"]');
+            if (!el || !value) return;
+            // Only select an option that actually exists, so a missing product
+            // leaves the dropdown on its placeholder rather than blank.
+            if (el.tagName === 'SELECT') {
+                var match = Array.prototype.find.call(el.options, function (o) {
+                    return o.value === value;
+                });
+                if (match) el.value = value;
+            } else {
+                el.value = value;
+            }
+        }
+
+        function open(trigger) {
+            opener = trigger || null;
+            if (trigger) {
+                setField('quote-product', trigger.getAttribute('data-quote-product') || '');
+                setField('quote-category', trigger.getAttribute('data-quote-category') || '');
+            }
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            var first = modal.querySelector('input, select, textarea, button');
+            if (first) first.focus();
+        }
+
+        function close() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            if (opener) { opener.focus(); opener = null; }
+        }
+
+        document.addEventListener('click', function (e) {
+            var trigger = e.target.closest('.btn-quote, [data-quote-open]');
+            if (trigger) { e.preventDefault(); open(trigger); return; }
+            if (e.target.closest('[data-quote-close]')) { e.preventDefault(); close(); }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !modal.hidden) close();
+            if (e.key !== 'Tab' || modal.hidden || !panel) return;
+            var f = panel.querySelectorAll('a[href], button, input, select, textarea');
+            f = Array.prototype.filter.call(f, function (el) { return !el.disabled && el.offsetParent !== null; });
+            if (!f.length) return;
+            var first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        });
+
+        // Close once CF7 reports the message was sent.
+        document.addEventListener('wpcf7mailsent', function () { setTimeout(close, 1600); });
     }
 
     function initAOS() {

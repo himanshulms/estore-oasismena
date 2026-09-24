@@ -138,7 +138,9 @@ $thumbs = $images;
 					<?php endif; ?>
 				</div>
 
-				<a href="<?php echo esc_url( estore_quote_url( $id ) ); ?>" class="btn-quote mt-auto lg:mt-12">
+				<a href="<?php echo esc_url( estore_quote_url( $id ) ); ?>" class="btn-quote mt-auto lg:mt-12"
+					data-quote-product="<?php the_title_attribute(); ?>"
+					data-quote-category="<?php echo esc_attr( $brand ? $brand->name : ( $term ? $term->name : '' ) ); ?>">
 					<?php echo esc_html( estore_quote_label() ); ?>
 				</a>
 			</div>

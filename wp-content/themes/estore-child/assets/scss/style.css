@@ -556,6 +556,132 @@ img {
       width: 150px;
       height: 150px; } }
 
+/* Request a Quote dialog. The old site's popup is white; this keeps its
+   fields and two-column layout but in the dark palette, so it belongs to
+   this design rather than fighting it. */
+.quote-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  /* Contact Form 7 output */ }
+  .quote-modal[hidden] {
+    display: none; }
+  .quote-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px); }
+  .quote-modal__panel {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background-color: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 40px; }
+    @media (max-width: 640px) {
+      .quote-modal__panel {
+        padding: 24px; } }
+  .quote-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #989a9f;
+    transition: color 0.2s ease, border-color 0.2s ease; }
+    .quote-modal__close:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.35); }
+  .quote-modal .qf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px; }
+    @media (max-width: 640px) {
+      .quote-modal .qf-grid {
+        grid-template-columns: 1fr; } }
+  .quote-modal p {
+    margin: 0; }
+  .quote-modal .qf-message {
+    margin-top: 16px; }
+  .quote-modal .qf-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end; }
+  .quote-modal input[type="text"],
+  .quote-modal input[type="email"],
+  .quote-modal input[type="tel"],
+  .quote-modal select,
+  .quote-modal textarea {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 13px 16px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.4; }
+    .quote-modal input[type="text"]::placeholder,
+    .quote-modal input[type="email"]::placeholder,
+    .quote-modal input[type="tel"]::placeholder,
+    .quote-modal select::placeholder,
+    .quote-modal textarea::placeholder {
+      color: #6b7280; }
+    .quote-modal input[type="text"]:focus,
+    .quote-modal input[type="email"]:focus,
+    .quote-modal input[type="tel"]:focus,
+    .quote-modal select:focus,
+    .quote-modal textarea:focus {
+      outline: none;
+      border-color: rgba(80, 120, 220, 0.65); }
+  .quote-modal select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px; }
+    .quote-modal select option {
+      background-color: #161616;
+      color: #ffffff; }
+  .quote-modal textarea {
+    min-height: 132px;
+    resize: vertical; }
+  .quote-modal input[type="submit"] {
+    background-color: #133578;
+    color: #ffffff;
+    border: 0;
+    border-radius: 8px;
+    height: 50px;
+    padding: 0 30px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
+    transition: background-color 0.25s ease; }
+    .quote-modal input[type="submit"]:hover {
+      background-color: #1b4699; }
+  .quote-modal .wpcf7-not-valid-tip {
+    color: #e84b50;
+    font-size: 0.75rem;
+    margin-top: 6px; }
+  .quote-modal .wpcf7-response-output {
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.8125rem; }
+
 /* --- Back to top ------------------------------------------------------ */
 .backtotop {
   position: fixed;

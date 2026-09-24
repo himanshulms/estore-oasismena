@@ -635,6 +635,165 @@ img {
     }
 }
 
+/* Request a Quote dialog. The old site's popup is white; this keeps its
+   fields and two-column layout but in the dark palette, so it belongs to
+   this design rather than fighting it. */
+.quote-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+
+    &[hidden] {
+        display: none;
+    }
+
+    &__backdrop {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(4px);
+    }
+
+    &__panel {
+        position: relative;
+        width: 100%;
+        max-width: 760px;
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+        background-color: $surface;
+        border: 1px solid $line;
+        border-radius: $radius-lg;
+        padding: 40px;
+
+        @media (max-width: 640px) {
+            padding: 24px;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        border: 1px solid $line;
+        color: $muted;
+        transition: color 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+            color: $white;
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+    }
+
+    /* Contact Form 7 output */
+    .qf-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+
+        @media (max-width: 640px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .qf-message {
+        margin-top: 16px;
+    }
+
+    .qf-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid $line;
+        border-radius: 8px;
+        padding: 13px 16px;
+        color: $white;
+        font-family: inherit;
+        font-size: 0.875rem;
+        line-height: 1.4;
+
+        &::placeholder {
+            color: $faint;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: rgba(80, 120, 220, 0.65);
+        }
+    }
+
+    select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 40px;
+
+        option {
+            background-color: $surface;
+            color: $white;
+        }
+    }
+
+    textarea {
+        min-height: 132px;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        background-color: $accent;
+        color: $white;
+        border: 0;
+        border-radius: $radius-btn;
+        height: 50px;
+        padding: 0 30px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
+        transition: background-color 0.25s ease;
+
+        &:hover {
+            background-color: $accent-hi;
+        }
+    }
+
+    .wpcf7-not-valid-tip {
+        color: #e84b50;
+        font-size: 0.75rem;
+        margin-top: 6px;
+    }
+
+    .wpcf7-response-output {
+        margin: 18px 0 0;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid $line;
+        font-size: 0.8125rem;
+    }
+}
+
 /* --- Back to top ------------------------------------------------------ */
 .backtotop {
     position: fixed;
