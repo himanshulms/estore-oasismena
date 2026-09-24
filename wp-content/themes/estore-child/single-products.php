@@ -38,7 +38,9 @@ while ( have_posts() ) :
 			$images[] = $src;
 		}
 	}
-	$thumbs = array_slice( $images, 0, 3 );
+	// Figma shows a 3-up row (3x201 + 2x24 = 651 in the 650 column). Products
+// carry up to six images, so keep that sizing and let extras wrap.
+$thumbs = $images;
 	$hero   = $term ? estore_category_hero( $term->term_id ) : '';
 	?>
 
