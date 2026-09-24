@@ -235,8 +235,23 @@ function estore_product_brand( $product_id ) {
 
 /** Wide hero image for a category, falling back to the square band image. */
 function estore_category_hero( $term_id ) {
-	$hero = trim( (string) get_term_meta( $term_id, 'category_hero_image', true ) );
-	return $hero ?: (string) get_term_meta( $term_id, 'category_image', true );
+	// Walk up: this term's own hero, then its square band image, then repeat on
+	// its parent. A brand can therefore override its category's hero, and a
+	// brand with no imagery of its own inherits one.
+	$seen = 0;
+	while ( $term_id && $seen++ < 5 ) {
+		$hero = trim( (string) get_term_meta( $term_id, 'category_hero_image', true ) );
+		if ( $hero ) {
+			return $hero;
+		}
+		$img = trim( (string) get_term_meta( $term_id, 'category_image', true ) );
+		if ( $img ) {
+			return $img;
+		}
+		$term    = get_term( $term_id, 'product-category' );
+		$term_id = ( $term && ! is_wp_error( $term ) ) ? (int) $term->parent : 0;
+	}
+	return '';
 }
 
 function estore_quote_url( $product_id = 0 ) {

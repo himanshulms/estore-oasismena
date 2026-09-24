@@ -24,8 +24,11 @@ while ( have_posts() ) :
 	$sku      = $get( 'product_sku' );
 	$desc     = $get( 'product_description' );
 	$gallery  = (array) $get( 'product_gallery' );
-	$terms    = get_the_terms( $id, 'product-category' );
-	$term     = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0] : null;
+	// A product is filed under a BRAND, which is a child of a category.
+	// The hero names the category (Figma shows "PROFESSIONAL LIGHTING"), while
+	// the "Category:" line names the brand ("Category: RBS Sound").
+	$term  = estore_product_category( $id );
+	$brand = estore_product_brand( $id );
 
 	// Featured image first, then any gallery rows, de-duplicated.
 	$images = array();
@@ -128,9 +131,10 @@ $thumbs = $images;
 					<?php if ( $sku ) : ?>
 						<p><span class="text-muted"><?php esc_html_e( 'SKU:', 'estore-child' ); ?></span> <?php echo esc_html( $sku ); ?></p>
 					<?php endif; ?>
-					<?php if ( $term ) : ?>
+					<?php $shown = $brand ?: $term; ?>
+					<?php if ( $shown ) : ?>
 						<p><span class="text-muted"><?php esc_html_e( 'Category:', 'estore-child' ); ?></span>
-							<a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="hover:text-white/80 transition-colors"><?php echo esc_html( $term->name ); ?></a></p>
+							<a href="<?php echo esc_url( get_term_link( $shown ) ); ?>" class="hover:text-white/80 transition-colors"><?php echo esc_html( $shown->name ); ?></a></p>
 					<?php endif; ?>
 				</div>
 
