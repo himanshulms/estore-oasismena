@@ -6,8 +6,9 @@
 wp-config.php
 .htaccess
 
-# Uploads and logs
-/wp-content/uploads/
+# Uploads ARE tracked. The database stores image references, but the files
+# themselves live here - ignoring them means a fresh clone renders no imagery
+# at all. Core is committed in this repo for the same reason.
 /wp-content/upgrade/
 /wp-content/debug.log
 *.log
