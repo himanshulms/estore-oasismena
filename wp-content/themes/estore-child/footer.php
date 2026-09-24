@@ -45,7 +45,7 @@ $contact     = get_page_by_path( 'contact' );
 			<div class="max-w-xs">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inline-flex items-center mb-5">
 					<?php if ( $footer_logo ) : ?>
-						<img src="<?php echo esc_url( $footer_logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-9 w-auto">
+						<img src="<?php echo esc_url( estore_image_url( $footer_logo ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-9 w-auto">
 					<?php else : ?>
 						<span class="text-lg font-semibold tracking-tight"><?php bloginfo( 'name' ); ?></span>
 					<?php endif; ?>

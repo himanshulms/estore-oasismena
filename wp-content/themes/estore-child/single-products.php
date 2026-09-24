@@ -51,7 +51,7 @@ $thumbs = $images;
 	<section class="relative overflow-hidden min-h-[560px] lg:min-h-[667px] flex items-start"
 		style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%;--hero-pt:145px">
 		<?php if ( $hero ) : ?>
-			<img src="<?php echo esc_url( $hero ); ?>" alt="" class="hero-media" aria-hidden="true">
+			<img src="<?php echo esc_url( estore_image_url( $hero ) ); ?>" alt="" class="hero-media" aria-hidden="true">
 			<div class="hero-scrim" aria-hidden="true"></div>
 			<div class="hero-fade" aria-hidden="true"></div>
 		<?php endif; ?>
@@ -95,7 +95,7 @@ $thumbs = $images;
 			<div>
 				<div class="bg-white rounded-[10px] relative h-[320px] sm:h-[420px] lg:h-[530px]">
 					<?php if ( $images ) : ?>
-						<img src="<?php echo esc_url( $images[0] ); ?>" alt="<?php the_title_attribute(); ?>"
+						<img src="<?php echo esc_url( estore_image_url( $images[0] ) ); ?>" alt="<?php the_title_attribute(); ?>"
 							class="absolute inset-0 w-full h-full object-contain p-12" id="gallery-main">
 					<?php else : ?>
 						<span class="absolute inset-0 grid place-items-center text-[#9AA0AE] text-sm"><?php esc_html_e( 'No image', 'estore-child' ); ?></span>
@@ -107,8 +107,8 @@ $thumbs = $images;
 						<?php foreach ( $thumbs as $i => $src ) : ?>
 							<button type="button" role="tab" aria-selected="<?php echo $i ? 'false' : 'true'; ?>"
 								class="gallery-thumb relative bg-white rounded-[10px] h-[110px] lg:h-[160px] overflow-hidden"
-								data-full="<?php echo esc_url( $src ); ?>">
-								<img src="<?php echo esc_url( $src ); ?>" alt="" class="absolute inset-0 w-full h-full object-contain p-6" loading="lazy">
+								data-full="<?php echo esc_url( estore_image_url( $src ) ); ?>">
+								<img src="<?php echo esc_url( estore_image_url( $src ) ); ?>" alt="" class="absolute inset-0 w-full h-full object-contain p-6" loading="lazy">
 							</button>
 						<?php endforeach; ?>
 					</div>

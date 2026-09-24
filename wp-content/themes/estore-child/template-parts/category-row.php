@@ -35,7 +35,7 @@ $products = new WP_Query( array(
 
 	<div class="cat-row__media <?php echo $flip ? 'lg:order-2' : ''; ?>">
 		<?php if ( $image ) : ?>
-			<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $term->name ); ?>"
+			<img src="<?php echo esc_url( estore_image_url( $image ) ); ?>" alt="<?php echo esc_attr( $term->name ); ?>"
 				class="absolute inset-0 w-full h-full object-cover" loading="lazy">
 		<?php else : ?>
 			<div class="absolute inset-0 bg-surface"></div>

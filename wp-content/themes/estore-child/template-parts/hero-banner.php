@@ -50,7 +50,7 @@ $multi = count( $slides ) > 1;
 				<div class="swiper-slide relative">
 
 					<?php if ( $image ) : ?>
-						<img src="<?php echo esc_url( $image ); ?>" alt="" class="hero-media" aria-hidden="true">
+						<img src="<?php echo esc_url( estore_image_url( $image ) ); ?>" alt="" class="hero-media" aria-hidden="true">
 						<div class="hero-scrim" aria-hidden="true"></div>
 						<div class="hero-fade" aria-hidden="true"></div>
 					<?php endif; ?>

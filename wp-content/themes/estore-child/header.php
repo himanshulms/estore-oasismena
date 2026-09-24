@@ -39,7 +39,7 @@
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="flex items-center shrink-0">
 			<?php $logo = get_theme_mod( 'header_logo' ); ?>
 			<?php if ( $logo ) : ?>
-				<img src="<?php echo esc_url( $logo ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-[37px] w-auto">
+				<img src="<?php echo esc_url( estore_image_url( $logo ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-[37px] w-auto">
 			<?php else : ?>
 				<span class="text-lg font-semibold tracking-tight"><?php bloginfo( 'name' ); ?></span>
 			<?php endif; ?>

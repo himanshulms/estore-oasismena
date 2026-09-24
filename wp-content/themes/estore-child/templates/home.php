@@ -138,7 +138,7 @@ $shop = get_page_by_path( 'products' );
 		<div class="relative overflow-hidden rounded-[24px] bg-panel border border-white/[0.06] min-h-[400px] lg:min-h-[543px] flex items-center">
 
 			<?php if ( $get( 'deal_image' ) ) : ?>
-				<img src="<?php echo esc_url( $get( 'deal_image' ) ); ?>" alt=""
+				<img src="<?php echo esc_url( estore_image_url( $get( 'deal_image' ) ) ); ?>" alt=""
 					class="absolute inset-0 w-full h-full object-cover opacity-25" aria-hidden="true" loading="lazy">
 				<div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/85 to-[#0A0A0A]/30" aria-hidden="true"></div>
 			<?php endif; ?>
@@ -148,7 +148,7 @@ $shop = get_page_by_path( 'products' );
 			<div class="glow glow--halo left-[69%] top-[85px]" aria-hidden="true"></div>
 
 			<?php if ( $get( 'deal_product_image' ) ) : ?>
-				<img src="<?php echo esc_url( $get( 'deal_product_image' ) ); ?>" alt=""
+				<img src="<?php echo esc_url( estore_image_url( $get( 'deal_product_image' ) ) ); ?>" alt=""
 					class="hidden lg:block absolute left-[62%] top-1/2 -translate-y-1/2 w-[357px] max-h-[408px] object-contain"
 					aria-hidden="true" loading="lazy">
 			<?php endif; ?>
@@ -222,7 +222,7 @@ $shop = get_page_by_path( 'products' );
 						<div class="flex items-center justify-between gap-4">
 							<span class="pillar-icon">
 								<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
-									<img src="<?php echo esc_url( $pillar['pillar_icon'] ); ?>" alt="" class="w-[22px] h-[22px]" aria-hidden="true">
+									<img src="<?php echo esc_url( estore_image_url( $pillar['pillar_icon'] ) ); ?>" alt="" class="w-[22px] h-[22px]" aria-hidden="true">
 								<?php else : ?>
 									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 										<?php if ( 0 === $i ) : ?>

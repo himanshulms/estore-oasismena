@@ -16,7 +16,7 @@ $parent = ( $parent && ! is_wp_error( $parent ) ) ? $parent : null;
 <section class="relative overflow-hidden min-h-[560px] lg:min-h-[667px] flex items-start"
 	style="--hero-left:30.5%;--hero-width:69.5%;--hero-opaque:30.5%;--hero-clear:65.3%;--hero-pt:145px">
 	<?php if ( $image ) : ?>
-		<img src="<?php echo esc_url( $image ); ?>" alt="" class="hero-media" aria-hidden="true">
+		<img src="<?php echo esc_url( estore_image_url( $image ) ); ?>" alt="" class="hero-media" aria-hidden="true">
 		<div class="hero-scrim" aria-hidden="true"></div>
 		<div class="hero-fade" aria-hidden="true"></div>
 	<?php endif; ?>
