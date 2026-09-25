@@ -385,6 +385,15 @@ img {
    blur(100px) for radius 200. Every glow on the page is listed here.
 
    Default = the hero wash: 500px, radius 240, #133578 @ 8% (node 215:6383). */
+/* A glow is a fixed-size blurred circle - 500-520px, wider than a phone - so
+   on a narrow screen it pushes the document past the viewport and the page
+   lays out with a dead strip down the right. Most bands already clip it; the
+   rule below makes every band that holds one do so. `clip` rather than
+   `hidden` because these bands also carry AOS's vertical travel, which
+   `hidden` would cut off, and `clip` creates no scroll container. */
+:has(> .glow) {
+  overflow-x: clip; }
+
 .glow {
   position: absolute;
   width: 500px;
