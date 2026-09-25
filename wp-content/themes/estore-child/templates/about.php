@@ -21,13 +21,15 @@ $body = get_the_content();
 ?>
 <?php if ( trim( (string) $body ) !== '' ) : ?>
 	<section class="pt-14 lg:pt-[100px]">
-		<div class="shell max-w-[760px] space-y-5 leading-relaxed">
-			<?php
-			while ( have_posts() ) {
-				the_post();
-				the_content();
-			}
-			?>
+		<div class="shell">
+			<div class="max-w-[760px] space-y-5 leading-relaxed">
+				<?php
+				while ( have_posts() ) {
+					the_post();
+					the_content();
+				}
+				?>
+			</div>
 		</div>
 	</section>
 <?php endif; ?>
