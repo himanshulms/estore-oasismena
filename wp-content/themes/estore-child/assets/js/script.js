@@ -89,6 +89,8 @@
     function initSwipers() {
         if (typeof Swiper === 'undefined') return;
 
+        var instances = [];
+
         document.querySelectorAll('.swiper').forEach(function (el) {
             var d = el.dataset;
             var num = function (v, fallback) {
@@ -96,7 +98,14 @@
                 return isNaN(n) ? fallback : n;
             };
 
-            new Swiper(el, {
+            instances.push(new Swiper(el, {
+                // Tailwind arrives from a CDN and writes its styles after this
+                // runs, so a slider inside a Tailwind-sized column measures the
+                // wrong width on init. These make Swiper re-measure once the
+                // real layout lands.
+                observer: true,
+                observeParents: true,
+                resizeObserver: true,
                 slidesPerView: num(d.slidesMobile, 1),
                 spaceBetween: num(d.spaceBetween, 24),
                 loop: d.loop === 'true',
@@ -110,7 +119,12 @@
                     768: { slidesPerView: num(d.slidesTablet, num(d.slidesPerView, 2)) },
                     1024: { slidesPerView: num(d.slidesPerView, 3) }
                 }
-            });
+            }));
+        });
+
+        // Belt and braces: re-measure once fonts, images and CDN CSS are in.
+        window.addEventListener('load', function () {
+            instances.forEach(function (sw) { if (sw && sw.update) sw.update(); });
         });
     }
 

@@ -92,7 +92,9 @@ $thumbs = $images;
 	<section class="pt-12 lg:pt-[87px]">
 		<div class="shell grid grid-cols-1 lg:grid-cols-[650fr_554fr] gap-8 lg:gap-9">
 
-			<div>
+			<?php // min-w-0: a grid item defaults to min-width:auto, so the slider's
+			      // wide slide row would force this column past its fr share. ?>
+			<div class="min-w-0">
 				<div class="bg-white rounded-[10px] relative h-[320px] sm:h-[420px] lg:h-[530px]">
 					<?php if ( $images ) : ?>
 						<img src="<?php echo esc_url( estore_image_url( $images[0] ) ); ?>" alt="<?php the_title_attribute(); ?>"
@@ -102,11 +104,40 @@ $thumbs = $images;
 					<?php endif; ?>
 				</div>
 
-				<?php if ( count( $thumbs ) > 1 ) : ?>
+				<?php
+				// Figma shows a 3-up row. Up to three, that is a plain grid; beyond
+				// that the row becomes a slider rather than wrapping, so the gallery
+				// never pushes the detail column out of alignment.
+				$thumb_class = 'gallery-thumb relative bg-white rounded-[10px] h-[110px] lg:h-[160px] overflow-hidden';
+				?>
+				<?php if ( count( $thumbs ) > 3 ) : ?>
+					<div class="swiper gallery-swiper mt-6"
+						data-slides-per-view="3" data-slides-tablet="3" data-slides-mobile="2"
+						data-space-between="24" data-loop="false">
+						<div class="swiper-wrapper" role="tablist" aria-label="<?php esc_attr_e( 'Product images', 'estore-child' ); ?>">
+							<?php foreach ( $thumbs as $i => $src ) : ?>
+								<div class="swiper-slide">
+									<button type="button" role="tab" aria-selected="<?php echo $i ? 'false' : 'true'; ?>"
+										class="<?php echo esc_attr( $thumb_class ); ?> w-full"
+										data-full="<?php echo esc_url( estore_image_url( $src ) ); ?>">
+										<img src="<?php echo esc_url( estore_image_url( $src ) ); ?>" alt="" class="absolute inset-0 w-full h-full object-contain p-6" loading="lazy">
+									</button>
+								</div>
+							<?php endforeach; ?>
+						</div>
+
+						<button type="button" class="gallery-nav gallery-nav--prev swiper-button-prev" aria-label="<?php esc_attr_e( 'Previous images', 'estore-child' ); ?>">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+						</button>
+						<button type="button" class="gallery-nav gallery-nav--next swiper-button-next" aria-label="<?php esc_attr_e( 'More images', 'estore-child' ); ?>">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+						</button>
+					</div>
+				<?php elseif ( count( $thumbs ) > 1 ) : ?>
 					<div class="grid grid-cols-3 gap-6 mt-6" role="tablist" aria-label="<?php esc_attr_e( 'Product images', 'estore-child' ); ?>">
 						<?php foreach ( $thumbs as $i => $src ) : ?>
 							<button type="button" role="tab" aria-selected="<?php echo $i ? 'false' : 'true'; ?>"
-								class="gallery-thumb relative bg-white rounded-[10px] h-[110px] lg:h-[160px] overflow-hidden"
+								class="<?php echo esc_attr( $thumb_class ); ?>"
 								data-full="<?php echo esc_url( estore_image_url( $src ) ); ?>">
 								<img src="<?php echo esc_url( estore_image_url( $src ) ); ?>" alt="" class="absolute inset-0 w-full h-full object-contain p-6" loading="lazy">
 							</button>
@@ -115,7 +146,7 @@ $thumbs = $images;
 				<?php endif; ?>
 			</div>
 
-			<div class="flex flex-col">
+			<div class="flex flex-col min-w-0">
 				<h2 class="display leading-[76px]"><?php the_title(); ?></h2>
 
 				<?php if ( $subtitle ) : ?>
