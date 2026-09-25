@@ -37,10 +37,8 @@ $line-faint: rgba(255, 255, 255, 0.05);
 
 $colors: (
     "ink": $ink,
-    "accent-bright": $accent-bright,
     "panel": $panel,
     "surface": $surface,
-    "surface-2": $surface-2,
     "accent": $accent,
     "white": $white,
     "muted": $muted,
@@ -141,14 +139,6 @@ img {
     font-size: clamp(2.125rem, #{"1.2rem + 4.5vw"}, 4rem); // 64px at 1440
     line-height: 1.3;
 }
-
-/* The outlined word sits on its own line at 70px against the 80px heading
-   ("Redefine your / AUDIO / Experience", "e-store / Products"). */
-.accent-word {
-    font-size: 0.875em;
-    display: block;
-}
-
 .display {
     font-size: clamp(2.25rem, #{"1.2rem + 4.2vw"}, 3.75rem); // 60px at 1440
     line-height: 1.27; // 76/60
@@ -250,7 +240,7 @@ img {
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.05); // Figma: #FFFFFF @ 5%
+    background-color: $line-faint; // Figma: #FFFFFF @ 5%
     border-radius: $radius;
     transition: background-color 0.3s ease;
 
@@ -265,7 +255,7 @@ img {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: $line-faint;
     border: 1px solid rgba(255, 255, 255, 0.1); // Figma: Rectangle 8 stroke
     border-radius: $radius;
     overflow: hidden;
@@ -330,7 +320,7 @@ img {
     padding: 0 38px 0 13px;
     text-overflow: ellipsis;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: $line-faint;
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: $white;
     font-size: 1rem; // 16/600
@@ -361,7 +351,7 @@ img {
     height: 38px;
     width: 100%;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: $line-faint;
     color: $white;
     font-size: 0.75rem;
     font-weight: 600;
@@ -442,7 +432,7 @@ img {
     &--deal {
         width: 384px;
         height: 384px;
-        background-color: rgba(19, 53, 120, 0.1);
+        background-color: $accent-soft;
         filter: blur(100px);
     }
 
@@ -718,7 +708,7 @@ img {
         height: 40px;
         padding: 0 13px;
         border-radius: 10px;
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: $line-faint;
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: $white;
         font-size: 1rem;
@@ -911,7 +901,7 @@ img {
     select,
     textarea {
         width: 100%;
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: $line-faint;
         border: 1px solid $line;
         border-radius: 8px;
         padding: 13px 16px;
@@ -968,7 +958,7 @@ img {
     }
 
     .wpcf7-not-valid-tip {
-        color: #e84b50;
+        color: $danger;
         font-size: 0.75rem;
         margin-top: 6px;
     }
@@ -1066,22 +1056,5 @@ img {
     &:focus {
         outline: none;
         border-color: rgba(80, 120, 220, 0.6);
-    }
-}
-
-/* Label / value rows in the product specification table. */
-.spec-row {
-    display: grid;
-    grid-template-columns: minmax(160px, 324px) 1fr; // label x=100, value x=424
-    gap: 16px;
-    padding: 0 0 17px; // 37px row pitch in the file
-
-    dt {
-        color: $muted;
-    }
-
-    dd {
-        margin: 0;
-        font-weight: 500;
     }
 }
