@@ -154,6 +154,13 @@ img {
   letter-spacing: -0.02em;
   font-weight: 700; }
 
+/* The detail hero prints a whole category name ("Broadcast & AV Production
+   Systems"), not Figma's two-word "Professional Lighting", so 80px is
+   oversized here. The wrap is left alone - only the type is stepped down. */
+.display-hero--sm {
+  font-size: clamp(2.125rem, 1.2rem + 4.5vw, 4rem);
+  line-height: 1.3; }
+
 /* The outlined word sits on its own line at 70px against the 80px heading
    ("Redefine your / AUDIO / Experience", "e-store / Products"). */
 .accent-word {

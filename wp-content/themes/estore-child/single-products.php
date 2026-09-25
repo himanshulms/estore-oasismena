@@ -67,7 +67,7 @@ $thumbs = $images;
 				<span aria-hidden="true">/</span>
 				<span class="text-white"><?php esc_html_e( 'Product details', 'estore-child' ); ?></span>
 			</nav>
-			<h1 class="display-hero uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
+			<h1 class="display-hero display-hero--sm uppercase"><?php echo esc_html( $term ? $term->name : get_the_title() ); ?></h1>
 
 			<?php
 			// Figma 215:7428. The hero copy is sourced from the Products page

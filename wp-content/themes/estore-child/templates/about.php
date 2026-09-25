@@ -99,15 +99,15 @@ $g     = function ( $key ) use ( $about ) {
 		<?php endif; ?>
 		<div class="glow left-[40%] top-[15px]" aria-hidden="true"></div>
 
-		<div class="relative px-6 lg:pl-[100px] lg:pr-8 py-14 w-full lg:max-w-[761px]" data-aos="fade-up">
-			<h2 class="display uppercase lg:max-w-[661px]"><?php echo esc_html( $g( 'founder_title' ) ); ?></h2>
+		<div class="relative px-6 lg:px-[100px] py-14 w-full" data-aos="fade-up">
+			<h2 class="display uppercase"><?php echo esc_html( $g( 'founder_title' ) ); ?></h2>
 
 			<?php if ( $g( 'founder_subtitle' ) ) : ?>
 				<p class="text-xl font-bold leading-8 mt-4"><?php echo esc_html( $g( 'founder_subtitle' ) ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $g( 'founder_body' ) ) : ?>
-				<p class="lede mt-5 max-w-[560px]"><?php echo esc_html( $g( 'founder_body' ) ); ?></p>
+				<p class="lede mt-5 max-w-[1100px]"><?php echo esc_html( $g( 'founder_body' ) ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $g( 'founder_button_label' ) ) : ?>
