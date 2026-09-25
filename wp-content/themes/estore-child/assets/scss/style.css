@@ -568,6 +568,7 @@ img {
   position: absolute;
   top: 50%;
   z-index: 5;
+  margin-top: 0;
   transform: translateY(-50%);
   width: 38px;
   height: 38px;

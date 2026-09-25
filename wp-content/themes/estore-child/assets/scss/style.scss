@@ -650,6 +650,9 @@ img {
     position: absolute;
     top: 50%;
     z-index: 5;
+    // Swiper's own button rule adds margin-top: -(navigation-size / 2), which
+    // lands on top of this translate and pushes the arrow above centre.
+    margin-top: 0;
     transform: translateY(-50%);
     width: 38px;
     height: 38px;

@@ -86,6 +86,8 @@ $g     = function ( $key ) use ( $about ) {
 </section>
 <?php endif; ?>
 
+<?php get_template_part( 'template-parts/management', null, array( 'post_id' => get_queried_object_id() ) ); ?>
+
 <?php /* --- Founder band: full-bleed, same treatment as the home deal band --- */ ?>
 <?php if ( $g( 'founder_title' ) || $g( 'founder_body' ) ) : ?>
 <section class="py-10 lg:py-14">
@@ -123,6 +125,5 @@ $g     = function ( $key ) use ( $about ) {
 </section>
 <?php endif; ?>
 
-<?php get_template_part( 'template-parts/management', null, array( 'post_id' => get_queried_object_id() ) ); ?>
 
 <?php get_footer(); ?>
