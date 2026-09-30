@@ -101,26 +101,37 @@ $g     = function ( $key ) use ( $about ) {
 		<?php endif; ?>
 		<div class="glow left-[40%] top-[15px]" aria-hidden="true"></div>
 
-		<div class="relative px-6 lg:px-[100px] py-14 w-full" data-aos="fade-up">
+		<div class="relative px-6 lg:pl-[100px] lg:pr-[60px] py-14 w-full" data-aos="fade-up">
 			<h2 class="display uppercase"><?php echo esc_html( $g( 'founder_title' ) ); ?></h2>
 
 			<?php if ( $g( 'founder_subtitle' ) ) : ?>
 				<p class="text-xl font-bold leading-8 mt-4"><?php echo esc_html( $g( 'founder_subtitle' ) ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( $g( 'founder_body' ) ) : ?>
-				<p class="lede mt-5 max-w-[1100px]"><?php echo esc_html( $g( 'founder_body' ) ); ?></p>
-			<?php endif; ?>
+			<?php // The copy keeps its 1100px measure so it still sets on two
+			      // lines, and the button sits alongside it on the same row
+			      // rather than below, pushed to the band's right edge. ?>
+			<?php if ( $g( 'founder_body' ) || $g( 'founder_button_label' ) ) : ?>
+				<div class="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-8 mt-5">
+					<?php if ( $g( 'founder_body' ) ) : ?>
+						<p class="lede lg:flex-1 min-w-0"><?php echo esc_html( $g( 'founder_body' ) ); ?></p>
+					<?php endif; ?>
 
-			<?php if ( $g( 'founder_button_label' ) ) : ?>
-				<a href="<?php echo esc_url( $g( 'founder_button_url' ) ?: '#' ); ?>" class="btn btn--primary mt-9">
-					<?php echo esc_html( $g( 'founder_button_label' ) ); ?>
-					<span class="w-6 h-6 grid place-items-center rounded-full border border-white/30">
-						<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9" />
-						</svg>
-					</span>
-				</a>
+					<?php if ( $g( 'founder_button_label' ) ) : ?>
+						<?php // Points at alshirawi.com, so it opens in a new tab rather
+						      // than taking the visitor off this site. ?>
+						<a href="<?php echo esc_url( $g( 'founder_button_url' ) ?: '#' ); ?>"
+							class="btn btn--primary shrink-0 self-start lg:self-center lg:ml-auto"
+							target="_blank" rel="noopener noreferrer">
+							<?php echo esc_html( $g( 'founder_button_label' ) ); ?>
+							<span class="w-6 h-6 grid place-items-center rounded-full border border-white/30">
+								<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6m0 0H9m9 0v9" />
+								</svg>
+							</span>
+						</a>
+					<?php endif; ?>
+				</div>
 			<?php endif; ?>
 		</div>
 	</div>

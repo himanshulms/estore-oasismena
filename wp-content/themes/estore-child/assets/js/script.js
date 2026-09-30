@@ -128,25 +128,38 @@
         });
     }
 
-    /* Product gallery: thumbnails swap the main image in place. */
+    /* Product gallery: thumbnails swap the main image in place. Past three
+       images the row is a Swiper, so the main image also follows the slider -
+       whichever thumbnail leads the visible run becomes the selected one. */
     function initGallery() {
         var main = document.getElementById('gallery-main');
-        var thumbs = document.querySelectorAll('.gallery-thumb');
+        var thumbs = Array.prototype.slice.call(document.querySelectorAll('.gallery-thumb'));
         if (!main || !thumbs.length) return;
 
-        thumbs.forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var full = btn.dataset.full;
-                if (!full) return;
-                main.src = full;
-                thumbs.forEach(function (t) {
-                    var on = t === btn;
-                    t.setAttribute('aria-selected', on ? 'true' : 'false');
-                    t.classList.toggle('ring-2', on);
-                    t.classList.toggle('ring-white/40', on);
-                });
+        function select(btn) {
+            if (!btn || !btn.dataset.full) return;
+            main.src = btn.dataset.full;
+            thumbs.forEach(function (t) {
+                var on = t === btn;
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+                t.classList.toggle('is-active', on);
             });
+        }
+
+        thumbs.forEach(function (btn) {
+            btn.addEventListener('click', function () { select(btn); });
         });
+        select(thumbs[0]);
+
+        // The slider is built by initSwipers(), which stores the instance on
+        // the element, so the two stay in step without a second Swiper here.
+        var slider = document.querySelector('.gallery-swiper');
+        if (slider && slider.swiper) {
+            slider.swiper.on('slideChange', function () {
+                var slide = slider.swiper.slides[slider.swiper.activeIndex];
+                if (slide) select(slide.querySelector('.gallery-thumb'));
+            });
+        }
     }
 
     /* Request a Quote dialog. Intercepts the quote buttons, prefills the

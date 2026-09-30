@@ -126,6 +126,46 @@ img {
     .shell {
       padding-inline: 0; } }
 
+/* Product rows inside an Explore Categories card. The tint bleeds 12px past
+   the row so the hover reads as a full-width band without the row resizing,
+   and the label and arrow travel towards the link. */
+.cat-list__link {
+  position: relative;
+  transition: color 0.25s ease; }
+  .cat-list__link::before {
+    content: "";
+    position: absolute;
+    inset: 0 -12px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none; }
+  .cat-list__link:hover::before, .cat-list__link:focus-visible::before {
+    opacity: 1; }
+  .cat-list__link .cat-list__text,
+  .cat-list__link svg {
+    transition: transform 0.25s ease, color 0.25s ease; }
+  .cat-list__link:hover .cat-list__text, .cat-list__link:focus-visible .cat-list__text {
+    transform: translateX(6px); }
+  .cat-list__link:hover svg, .cat-list__link:focus-visible svg {
+    transform: translateX(3px); }
+
+/* Hover motion is decoration; honour the OS setting. */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn > svg,
+  .btn > span,
+  .cat-list__link .cat-list__text,
+  .cat-list__link svg {
+    transition: none; }
+
+  .btn:hover,
+  .btn:hover > svg,
+  .btn:hover > span,
+  .cat-list__link:hover .cat-list__text,
+  .cat-list__link:hover svg {
+    transform: none; } }
 /* --- Type scale ------------------------------------------------------- */
 /* Sizes and line-heights are the Figma values, not approximations:
    hero 80/110, accent word 70/110, section headings 60/76, category titles
@@ -194,15 +234,28 @@ img {
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease; }
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  /* The icon travels with the button. This is the only motion a button has -
+     it animates on hover rather than on page load. */
+  /* The ghost button's arrow points right, the primary's points up-right. */ }
+  .btn > svg,
+  .btn > span {
+    transition: transform 0.25s ease; }
   .btn:hover {
-    transform: translateY(-1px); }
+    transform: translateY(-2px); }
+  .btn:hover > svg {
+    transform: translateX(4px); }
+  .btn:hover > span {
+    transform: translate(2px, -2px); }
+  .btn:active {
+    transform: translateY(0); }
   .btn--primary {
     background-color: #133578;
     color: #ffffff;
     box-shadow: 0 0 20px rgba(37, 99, 235, 0.35); }
     .btn--primary:hover {
-      background-color: #1b4699; }
+      background-color: #1b4699;
+      box-shadow: 0 8px 28px rgba(37, 99, 235, 0.55); }
   .btn--ghost {
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #ffffff; }
@@ -509,6 +562,15 @@ img {
 
 /* Vision / mission / values tile: 44x44, radius 12, #2563EB at 10% with a
    0.8px #2563EB stroke at 20%; the icon strokes #2563EB at full opacity. */
+/* The IMS policy and the ISO certificate are white documents dropped onto the
+   dark page, so they get the card radius and a hairline to sit on rather than
+   appearing to float. */
+.company-doc {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: #ffffff; }
+
 .pillar-icon {
   width: 44px;
   height: 44px;
@@ -547,6 +609,35 @@ img {
     .team-photo {
       width: 150px;
       height: 150px; } }
+
+/* The thumbnail currently shown in the main panel. Previously this was a pair
+   of Tailwind ring utilities toggled from JS; it lives here so the selected
+   state is styled in one place whether the row is a grid or a slider. */
+.gallery-thumb {
+  transition: box-shadow 0.25s ease, transform 0.25s ease; }
+  .gallery-thumb:hover {
+    transform: translateY(-2px); }
+  .gallery-thumb.is-active {
+    box-shadow: 0 0 0 2px #2563eb; }
+
+/* 404. The category links are only used on that page, so they live here
+   rather than being folded into the chip component. */
+.notfound-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #989a9f;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease; }
+  .notfound-chip:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.24);
+    background-color: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px); }
 
 /* Product gallery slider - shown only when a product has more than three
    images. Swiper's default arrows are replaced so they match the site. */
@@ -675,6 +766,99 @@ img {
 /* Request a Quote dialog. The old site's popup is white; this keeps its
    fields and two-column layout but in the dark palette, so it belongs to
    this design rather than fighting it. */
+/* Shared Contact Form 7 styling: the quote modal and the contact page both
+   carry .estore-form, so the two forms cannot drift apart. Markup classes
+   (qf-grid / qf-message / qf-actions) come from the form bodies in wp-admin. */
+.estore-form {
+  /* Taken out of the flow so the submit button sits flush with the right
+     edge of the fields above it; it still shows while the form posts. */ }
+  .estore-form .qf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px; }
+    @media (max-width: 640px) {
+      .estore-form .qf-grid {
+        grid-template-columns: 1fr; } }
+  .estore-form p {
+    margin: 0; }
+  .estore-form .qf-message {
+    margin-top: 16px; }
+  .estore-form .qf-actions {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end; }
+  .estore-form .wpcf7-spinner {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0; }
+  .estore-form input[type="text"],
+  .estore-form input[type="email"],
+  .estore-form input[type="tel"],
+  .estore-form select,
+  .estore-form textarea {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 13px 16px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.4; }
+    .estore-form input[type="text"]::placeholder,
+    .estore-form input[type="email"]::placeholder,
+    .estore-form input[type="tel"]::placeholder,
+    .estore-form select::placeholder,
+    .estore-form textarea::placeholder {
+      color: #6b7280; }
+    .estore-form input[type="text"]:focus,
+    .estore-form input[type="email"]:focus,
+    .estore-form input[type="tel"]:focus,
+    .estore-form select:focus,
+    .estore-form textarea:focus {
+      outline: none;
+      border-color: rgba(80, 120, 220, 0.65); }
+  .estore-form select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px; }
+    .estore-form select option {
+      background-color: #161616;
+      color: #ffffff; }
+  .estore-form textarea {
+    min-height: 132px;
+    resize: vertical; }
+  .estore-form input[type="submit"] {
+    background-color: #133578;
+    color: #ffffff;
+    border: 0;
+    border-radius: 8px;
+    height: 50px;
+    padding: 0 30px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
+    transition: background-color 0.25s ease; }
+    .estore-form input[type="submit"]:hover {
+      background-color: #1b4699; }
+  .estore-form .wpcf7-not-valid-tip {
+    color: #e84b50;
+    font-size: 0.75rem;
+    margin-top: 6px; }
+  .estore-form .wpcf7-response-output {
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.8125rem; }
+
 .quote-modal {
   position: fixed;
   inset: 0;
@@ -718,85 +902,6 @@ img {
     .quote-modal__close:hover {
       color: #ffffff;
       border-color: rgba(255, 255, 255, 0.35); }
-  .quote-modal .qf-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px; }
-    @media (max-width: 640px) {
-      .quote-modal .qf-grid {
-        grid-template-columns: 1fr; } }
-  .quote-modal p {
-    margin: 0; }
-  .quote-modal .qf-message {
-    margin-top: 16px; }
-  .quote-modal .qf-actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end; }
-  .quote-modal input[type="text"],
-  .quote-modal input[type="email"],
-  .quote-modal input[type="tel"],
-  .quote-modal select,
-  .quote-modal textarea {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    padding: 13px 16px;
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 0.875rem;
-    line-height: 1.4; }
-    .quote-modal input[type="text"]::placeholder,
-    .quote-modal input[type="email"]::placeholder,
-    .quote-modal input[type="tel"]::placeholder,
-    .quote-modal select::placeholder,
-    .quote-modal textarea::placeholder {
-      color: #6b7280; }
-    .quote-modal input[type="text"]:focus,
-    .quote-modal input[type="email"]:focus,
-    .quote-modal input[type="tel"]:focus,
-    .quote-modal select:focus,
-    .quote-modal textarea:focus {
-      outline: none;
-      border-color: rgba(80, 120, 220, 0.65); }
-  .quote-modal select {
-    appearance: none;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.875' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1L6 7L11 1'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 40px; }
-    .quote-modal select option {
-      background-color: #161616;
-      color: #ffffff; }
-  .quote-modal textarea {
-    min-height: 132px;
-    resize: vertical; }
-  .quote-modal input[type="submit"] {
-    background-color: #133578;
-    color: #ffffff;
-    border: 0;
-    border-radius: 8px;
-    height: 50px;
-    padding: 0 30px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.35);
-    transition: background-color 0.25s ease; }
-    .quote-modal input[type="submit"]:hover {
-      background-color: #1b4699; }
-  .quote-modal .wpcf7-not-valid-tip {
-    color: #e84b50;
-    font-size: 0.75rem;
-    margin-top: 6px; }
-  .quote-modal .wpcf7-response-output {
-    margin: 18px 0 0;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    font-size: 0.8125rem; }
 
 /* --- Back to top ------------------------------------------------------ */
 .backtotop {

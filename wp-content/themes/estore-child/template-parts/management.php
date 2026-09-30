@@ -9,6 +9,9 @@
  * grid is reordered with Page Attributes.
  *
  * $args['post_id'] is the page supplying the eyebrow and heading only.
+ * $args['eyebrow'] / $args['heading'] override that lookup, for a page whose
+ * CFS group has no team_eyebrow/team_heading of its own; passing an empty
+ * string for either omits it.
  *
  * Figma 215:6775: a 2x2 grid with hairline dividers over a 520px lime wash;
  * portraits masked to a 200px circle on a grey gradient.
@@ -25,12 +28,21 @@ if ( ! $members ) {
 	return;
 }
 
-$eyebrow = $source && function_exists( 'cfs' ) ? trim( (string) cfs()->get( 'team_eyebrow', $source ) ) : '';
-$heading = $source && function_exists( 'cfs' ) ? trim( (string) cfs()->get( 'team_heading', $source ) ) : '';
+$eyebrow = array_key_exists( 'eyebrow', (array) $args )
+	? trim( (string) $args['eyebrow'] )
+	: ( $source && function_exists( 'cfs' ) ? trim( (string) cfs()->get( 'team_eyebrow', $source ) ) : '' );
+$heading = array_key_exists( 'heading', (array) $args )
+	? trim( (string) $args['heading'] )
+	: ( $source && function_exists( 'cfs' ) ? trim( (string) cfs()->get( 'team_heading', $source ) ) : '' );
+
+// An explicit empty eyebrow omits the label; an absent one falls back.
+$show_eyebrow = ! array_key_exists( 'eyebrow', (array) $args ) || '' !== $eyebrow;
 ?>
 <section class="py-14 lg:py-[60px]">
 	<div class="shell text-center">
-		<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $eyebrow ?: __( 'Our Team', 'estore-child' ) ); ?></p>
+		<?php if ( $show_eyebrow ) : ?>
+			<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $eyebrow ?: __( 'Our Team', 'estore-child' ) ); ?></p>
+		<?php endif; ?>
 		<h2 class="display uppercase"><?php echo esc_html( $heading ?: __( 'Management', 'estore-child' ) ); ?></h2>
 
 		<div class="relative mt-12">

@@ -67,8 +67,8 @@ $products = new WP_Query( array(
 					$sub = function_exists( 'cfs' ) ? cfs()->get( 'product_subtitle', get_the_ID() ) : '';
 					?>
 					<li class="border-t border-white/[0.06] last:border-b">
-						<a href="<?php the_permalink(); ?>" class="flex items-center justify-between gap-4 py-3 group">
-							<span class="min-w-0">
+						<a href="<?php the_permalink(); ?>" class="cat-list__link flex items-center justify-between gap-4 py-3 group">
+							<span class="cat-list__text min-w-0">
 								<span class="block text-sm font-semibold leading-5 truncate"><?php the_title(); ?></span>
 								<?php if ( $sub ) : ?>
 									<span class="block text-[11px] leading-4 text-muted truncate mt-0.5"><?php echo esc_html( $sub ); ?></span>

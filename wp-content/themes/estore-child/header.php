@@ -59,10 +59,11 @@
 
 		<div class="flex items-center gap-3">
 			<?php
-			// "Sign in" in the design. Points at the WP login unless a dedicated
-			// account page exists, so it never becomes a dead link.
+			// "Sign in" in the design. There are no customer accounts on this
+			// site, so it stays on the page rather than dropping a visitor on
+			// the WordPress login. Once an /account/ page exists it links there.
 			$account = get_page_by_path( 'account' );
-			$sign_in = $account ? get_permalink( $account ) : wp_login_url( home_url( '/' ) );
+			$sign_in = $account ? get_permalink( $account ) : '#';
 			?>
 			<!-- Figma 215:6910: 92x33, radius 8, #133578, 12/600 label, 16px icon -->
 			<a href="<?php echo esc_url( $sign_in ); ?>" class="btn btn--primary hidden sm:inline-flex !h-[33px] !px-3.5 !gap-2 !text-xs !font-semibold">

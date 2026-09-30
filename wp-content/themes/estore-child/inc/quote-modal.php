@@ -92,8 +92,26 @@ function estore_quote_dialog() {
 				<?php esc_html_e( "Please fill out the form below and we'll get back to you with a quotation.", 'estore-child' ); ?>
 			</p>
 
-			<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( $form_id ) . '"]' ); ?>
+			<div class="estore-form">
+				<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( $form_id ) . '"]' ); ?>
+			</div>
 		</div>
 	</div>
 	<?php
+}
+
+/**
+ * [_enquiry_email] for Contact Form 7 "To" fields.
+ *
+ * Both forms use this tag, so the delivery address is changed in one place -
+ * Appearance > Customize > Theme Settings > Enquiry Email - instead of being
+ * edited form by form. Falls back to the WordPress admin email.
+ */
+add_filter( 'wpcf7_special_mail_tags', 'estore_enquiry_mail_tag', 10, 2 );
+function estore_enquiry_mail_tag( $output, $name ) {
+	if ( '_enquiry_email' !== $name ) {
+		return $output;
+	}
+	$email = trim( (string) get_theme_mod( 'enquiry_email' ) );
+	return is_email( $email ) ? $email : get_option( 'admin_email' );
 }

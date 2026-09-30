@@ -116,20 +116,42 @@ $contact     = get_page_by_path( 'contact' );
 				<?php endif; ?>
 
 				<h2 class="text-xs font-semibold mt-8 mb-4"><?php esc_html_e( 'Newsletter Subscribe', 'estore-child' ); ?></h2>
-				<?php if ( shortcode_exists( 'contact-form-7' ) && get_theme_mod( 'newsletter_form_id' ) ) : ?>
-					<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( get_theme_mod( 'newsletter_form_id' ) ) . '"]' ); ?>
-				<?php else : ?>
-					<form class="flex" action="<?php echo esc_url( $contact ? get_permalink( $contact ) : home_url( '/contact/' ) ); ?>" method="get">
-						<label for="newsletter-email" class="sr-only"><?php esc_html_e( 'Email address', 'estore-child' ); ?></label>
-						<input type="email" name="email" id="newsletter-email" class="field" placeholder="email@example.com" required>
-						<button type="submit" class="bg-accent hover:bg-[#1b4699] transition-colors px-4 rounded-r-lg shrink-0"
-							aria-label="<?php esc_attr_e( 'Subscribe', 'estore-child' ); ?>">
-							<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-							</svg>
-						</button>
-					</form>
+				<?php
+				// Posts straight to Newsletters' opt-in endpoint, so a signup
+				// lands in Newsletters > Subscribers, while the markup stays
+				// the footer strip from the design rather than the plugin's own
+				// Bootstrap form. No consent box: it is not in the design, and
+				// that field is set to optional to match. Without the plugin
+				// the same strip falls back to a GET to the contact page.
+				$nl_list   = function_exists( 'estore_newsletter_list_id' ) ? estore_newsletter_list_id() : 0;
+				$nl_action = $nl_list
+					? add_query_arg( 'wpmlmethod', 'optin' )
+					: ( $contact ? get_permalink( $contact ) : home_url( '/contact/' ) );
+				?>
+				<?php if ( $nl_list && ! empty( $_GET['subscribed'] ) ) : ?>
+					<p class="text-xs text-muted mb-3"><?php esc_html_e( 'Thanks - you are on the list.', 'estore-child' ); ?></p>
 				<?php endif; ?>
+				<form class="flex" method="<?php echo $nl_list ? 'post' : 'get'; ?>" action="<?php echo esc_url( $nl_action ); ?>">
+					<label for="newsletter-email" class="sr-only"><?php esc_html_e( 'Email address', 'estore-child' ); ?></label>
+					<input type="email" name="email" id="newsletter-email" class="field" placeholder="email@example.com" required>
+
+					<?php if ( $nl_list ) : ?>
+						<input type="hidden" name="list_id[]" value="<?php echo esc_attr( $nl_list ); ?>">
+						<input type="hidden" name="instance[ajax]" value="N">
+						<input type="hidden" name="instance[scroll]" value="N">
+						<input type="hidden" name="instance[captcha]" value="N">
+						<input type="hidden" name="instance[list]" value="<?php echo esc_attr( $nl_list ); ?>">
+						<?php // The plugin's honeypot - real visitors leave it empty. ?>
+						<input type="text" name="newslettername" value="" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
+					<?php endif; ?>
+
+					<button type="submit" class="bg-accent hover:bg-[#1b4699] transition-colors px-4 rounded-r-lg shrink-0"
+						aria-label="<?php esc_attr_e( 'Subscribe', 'estore-child' ); ?>">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+						</svg>
+					</button>
+				</form>
 			</div>
 		</div>
 

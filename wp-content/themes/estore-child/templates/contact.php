@@ -20,7 +20,9 @@ $address = get_theme_mod( 'address_link' );
 
 		<div data-aos="fade-up">
 			<?php if ( $form_id && shortcode_exists( 'contact-form-7' ) ) : ?>
-				<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( $form_id ) . '"]' ); ?>
+				<div class="estore-form">
+					<?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( $form_id ) . '"]' ); ?>
+				</div>
 			<?php else : ?>
 				<p class="text-muted text-sm">
 					<?php esc_html_e( 'Set the Contact Form 7 form ID in the page’s "Contact Form ID" field.', 'estore-child' ); ?>

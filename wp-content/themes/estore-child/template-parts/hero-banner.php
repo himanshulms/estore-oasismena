@@ -82,17 +82,25 @@ $multi = count( $slides ) > 1;
 							<?php endif; ?>
 
 							<?php if ( $title || $accent ) : ?>
-								<h1 class="display-hero uppercase" data-aos="fade-up" data-aos-delay="60">
-									<?php echo esc_html( $title ); ?>
-									<?php if ( $accent ) : ?>
-										<?php get_template_part( 'template-parts/outlined-word', null, array( 'text' => $accent ) ); ?>
+								<h1 class="display-hero uppercase">
+									<?php if ( $title ) : ?>
+										<span class="block" data-aos="fade-up" data-aos-delay="60"><?php echo esc_html( $title ); ?></span>
 									<?php endif; ?>
-									<?php echo $tail ? esc_html( $tail ) : ''; ?>
+									<?php // The outlined word slides in from the left - AOS's
+									      // fade-right starts the element to the left and settles it. ?>
+									<?php if ( $accent ) : ?>
+										<span class="block" data-aos="fade-right" data-aos-delay="140" data-aos-duration="900">
+											<?php get_template_part( 'template-parts/outlined-word', null, array( 'text' => $accent ) ); ?>
+										</span>
+									<?php endif; ?>
+									<?php if ( $tail ) : ?>
+										<span class="block" data-aos="fade-up" data-aos-delay="220"><?php echo esc_html( $tail ); ?></span>
+									<?php endif; ?>
 								</h1>
 							<?php endif; ?>
 
 							<?php if ( $desc ) : ?>
-								<div class="flex items-center gap-6 mt-9 max-w-[424px]" data-aos="fade-up" data-aos-delay="120">
+								<div class="flex items-center gap-6 mt-9 max-w-[424px]" data-aos="fade-up" data-aos-delay="300">
 									<span class="hidden sm:block w-10 h-px bg-accent shrink-0" aria-hidden="true"></span>
 									<p class="lede"><?php echo wp_kses_post( $desc ); ?></p>
 								</div>
@@ -101,7 +109,7 @@ $multi = count( $slides ) > 1;
 							<?php // Skip the row entirely when neither button has a label, or its
 							      // 60px top margin leaves a gap under the copy. ?>
 							<?php if ( ! empty( $slide['slide_cta_label'] ) || ! empty( $slide['slide_link_label'] ) ) : ?>
-							<div class="flex flex-wrap items-center gap-6 mt-[60px]" data-aos="fade-up" data-aos-delay="180">
+							<div class="flex flex-wrap items-center gap-6 mt-[60px]">
 								<?php if ( ! empty( $slide['slide_cta_label'] ) ) : ?>
 									<a href="<?php echo esc_url( $slide['slide_cta_url'] ?? '#' ); ?>" class="btn btn--primary">
 										<?php echo esc_html( $slide['slide_cta_label'] ); ?>

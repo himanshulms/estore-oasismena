@@ -35,13 +35,15 @@ function estore_customize_register( $wp_customize ) {
 		'footer_logo'        => array( 'image',    __( 'Footer Logo', 'estore-child' ) ),
 		'footer_description' => array( 'textarea', __( 'Footer Description', 'estore-child' ) ),
 		'footer_wordmark'    => array( 'text',     __( 'Footer Wordmark (large ghosted text)', 'estore-child' ) ),
-		'newsletter_form_id' => array( 'text',     __( 'Newsletter CF7 Form ID', 'estore-child' ) ),
 		'linkedin_link'      => array( 'url',      __( 'LinkedIn URL', 'estore-child' ) ),
 		'instagram_link'     => array( 'url',      __( 'Instagram URL', 'estore-child' ) ),
 		'facebook_link'      => array( 'url',      __( 'Facebook URL', 'estore-child' ) ),
 		'x_link'             => array( 'url',      __( 'X URL', 'estore-child' ) ),
 		'whatsapp_link'      => array( 'url',      __( 'WhatsApp URL', 'estore-child' ) ),
-		'email_link'         => array( 'text',     __( 'Contact Email', 'estore-child' ) ),
+		'email_link'         => array( 'text',     __( 'Contact Email (shown in the footer)', 'estore-child' ) ),
+		// Where the quote and contact forms deliver. Kept separate from
+		// email_link because that one is published on the site.
+		'enquiry_email'      => array( 'text',     __( 'Enquiry Email (where forms are sent)', 'estore-child' ) ),
 		'phone_link'         => array( 'text',     __( 'Contact Phone', 'estore-child' ) ),
 		'address_link'       => array( 'textarea', __( 'Address', 'estore-child' ) ),
 	);
