@@ -6,9 +6,11 @@
 wp-config.php
 .htaccess
 
-# Uploads ARE tracked. The database stores image references, but the files
-# themselves live here - ignoring them means a fresh clone renders no imagery
-# at all. Core is committed in this repo for the same reason.
+# Uploads are NOT tracked - they are 35MB of generated media and belong in a
+# backup, not in the repo. Note the consequence: a fresh clone renders no
+# imagery until wp-content/uploads is restored alongside the database, since
+# the DB stores references to these files rather than the files themselves.
+/wp-content/uploads/
 /wp-content/upgrade/
 /wp-content/debug.log
 *.log
