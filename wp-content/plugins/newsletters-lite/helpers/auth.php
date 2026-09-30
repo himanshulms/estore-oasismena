@@ -1,0 +1,258 @@
+<?php
+
+if (!class_exists('wpmlAuthHelper')) {
+class wpmlAuthnewsHelper extends wpMailPlugin {
+
+	var $name = 'Authnews';
+	var $cookiename = 'subscriberauth';
+	var $emailcookiename = 'subscriberemailauth';
+
+	function logged_in($subscriber_id = null) {
+		global $wpdb, $Db, $Subscriber;
+		
+		$user_id = false;	
+		if (is_user_logged_in()) {
+			$user_id = get_current_user_id();
+		}
+		
+		$subscriberauth = $this -> read_cookie();
+		$Db -> model = $Subscriber -> model;
+		
+		if (!empty($subscriberauth) && $subscriber = $Db -> find(array('cookieauth' => $subscriberauth), false, false, true, true, false)) {
+            // VULNERABILITY PATCH: Reject predictable tokens to prevent session takeover
+            if ($subscriberauth === md5($subscriber->id)) {
+                return false;
+            }
+			if (!empty($subscriber_id) && (int) $subscriber -> id !== (int) $subscriber_id) {
+				return false;
+			}
+
+            return $subscriber;
+		} elseif (!empty($user_id) && $subscriber = $Db -> find(array('user_id' => $user_id))) {
+			if (!empty($subscriber_id) && (int) $subscriber -> id !== (int) $subscriber_id) {
+				return false;
+			}
+
+			return $subscriber;
+		}
+
+		return false;
+	}
+
+	function read_cookie($create = false) {
+		$managementauthtype = $this -> get_option('managementauthtype');
+
+		switch ($managementauthtype) {
+			case 1			:
+				if (isset($_COOKIE[$this -> cookiename])) {
+					return sanitize_text_field(wp_unslash($_COOKIE[$this -> cookiename]));
+				}
+				break;
+			case 2			:
+				if (isset($_SESSION[$this -> cookiename])) {
+					return sanitize_text_field(wp_unslash($_SESSION[$this -> cookiename]));
+				}
+				break;
+			case 3			:
+			default 		:
+				if (isset($_COOKIE[$this -> cookiename])) {
+					return sanitize_text_field(wp_unslash($_COOKIE[$this -> cookiename]));
+				} elseif (isset($_SESSION[$this -> cookiename])) {
+					return sanitize_text_field(wp_unslash($_SESSION[$this -> cookiename]));
+				}
+				break;
+		}
+
+		return false;
+	}
+
+	function read_emailcookie() {
+		$managementauthtype = $this -> get_option('managementauthtype');
+
+		switch ($managementauthtype) {
+			case 1					:
+				if (isset($_COOKIE[$this -> emailcookiename])) {
+					return sanitize_text_field(wp_unslash($_COOKIE[$this -> emailcookiename]));
+				}
+				break;
+			case 2					:
+				if (isset($_SESSION[$this -> emailcookiename])) {
+					return sanitize_text_field(wp_unslash($_SESSION[$this -> emailcookiename]));
+				}
+				break;
+			case 3					:
+			default 				:
+				if (isset($_COOKIE[$this -> emailcookiename])) {
+					return sanitize_text_field(wp_unslash($_COOKIE[$this -> emailcookiename]));
+				} elseif (isset($_SESSION[$this -> emailcookiename])) {
+					return sanitize_text_field(wp_unslash($_SESSION[$this -> emailcookiename]));
+				}
+				break;
+		}
+
+		return false;
+	}
+
+	function write_db() {
+
+	}
+
+	function set_emailcookie($email = null, $days = "+30 days") {
+		if (is_feed()) {
+			return false;
+		}
+
+		$managementauthtype = $this -> get_option('managementauthtype');
+
+		if (!empty($email)) {
+			switch ($managementauthtype) {
+				case 1					:
+                    //phpcs:ignore
+					if (!empty($_COOKIE[$this -> emailcookiename]) && $_COOKIE[$this -> emailcookiename]) {
+						return true;
+					}
+
+					if (!headers_sent()) {
+						setcookie($this -> emailcookiename, $email, strtotime($days), '/');
+					} else {
+						$this -> javascript_cookie($this -> emailcookiename, $email);
+					}
+
+					$_COOKIE[$this -> emailcookiename] = $email;
+					break;
+				case 2					:
+					$_SESSION[$this -> emailcookiename] = $email;
+					break;
+				case 3					:
+				default 				:
+                    //phpcs:ignore
+					if (!empty($_COOKIE[$this -> emailcookiename]) && $_COOKIE[$this -> emailcookiename]) {
+						return true;
+					}
+
+					if (!headers_sent()) {
+						setcookie($this -> emailcookiename, $email, strtotime($days), '/');
+					} else {
+						$this -> javascript_cookie($this -> emailcookiename, $email);
+					}
+
+					$_COOKIE[$this -> emailcookiename] = $email;
+					$_SESSION[$this -> emailcookiename] = $email;
+					break;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	function set_cookie($value = null, $days = "+30 days") {
+		if (is_feed()) {
+			return false;
+		}
+
+		$managementauthtype = $this -> get_option('managementauthtype');
+
+		if (!empty($value)) {
+			switch ($managementauthtype) {
+				case 1						:
+					if (!empty($_COOKIE[$this -> cookiename]) && $_COOKIE[$this -> cookiename] == $value) {
+						return true;
+					}
+
+					if (!headers_sent()) {
+						setcookie($this -> cookiename, $value, strtotime($days), '/');
+					} else {
+						return false;
+					}
+
+					$_COOKIE[$this -> cookiename] = $value;
+					break;
+				case 2						:
+					$_SESSION[$this -> cookiename] = $value;
+					break;
+				case 3						:
+				default 					:
+					if (!empty($_COOKIE[$this -> cookiename]) && $_COOKIE[$this -> cookiename] == $value) {
+						return true;
+					}
+
+					if (!headers_sent()) {
+						setcookie($this -> cookiename, $value, strtotime($days), '/');
+					} else {
+						$_SESSION[$this -> cookiename] = $value;
+						return false;
+					}
+
+					$_COOKIE[$this -> cookiename] = $value;
+					$_SESSION[$this -> cookiename] = $value;
+					break;
+			}
+		}
+
+		return true;
+	}
+
+	function delete_cookie($cookiename = null, $cookievalue = null) {		
+		if (!headers_sent() ) {
+			unset($_COOKIE[$cookiename]);
+			//setcookie($cookiename, $cookievalue, current_time('timestamp') - 3600, '/');
+			setcookie($cookiename, null, -1, '/');
+		} else {
+			$this -> javascript_cookie($cookiename, $cookievalue, true);
+		}
+	}
+
+	/* auth.php – replace javascript_cookie() */
+	function javascript_cookie( $cookiename = null, $value = null, $delete = false ) {
+
+		if ( empty( $cookiename ) || is_null( $value ) ) {
+			return false;
+		}
+
+		$js  = '(function(){';
+		$js .= 'var d=new Date();';
+		$js .= 'd.setTime(d.getTime() '. ( $delete ? '-' : '+' ) .' 7*24*60*60*1000);';
+		$js .= 'document.cookie="'. $cookiename .'='. $value .'; expires="+d.toUTCString();';
+		$js .= '})();';
+
+		// register a dummy handle the first time we need it
+		if ( ! wp_script_is( 'wpml-authhelper', 'registered' ) ) {
+			wp_register_script( 'wpml-authhelper', '' );   // no actual file
+			wp_enqueue_script(  'wpml-authhelper' );
+		}
+
+		wp_add_inline_script( 'wpml-authhelper', $js );
+
+		return true;
+	}
+
+
+	function gen_subscriberauth() {
+		if (function_exists('wp_generate_password')) {
+			return wp_generate_password(64, false, false);
+		}
+
+		try {
+			if (function_exists('random_bytes')) {
+				return bin2hex(random_bytes(32));
+			}
+		} catch (Exception $e) {
+			// Fall through to OpenSSL below.
+		}
+
+		if (function_exists('openssl_random_pseudo_bytes')) {
+			$strong = false;
+			$bytes = openssl_random_pseudo_bytes(32, $strong);
+			if ($bytes !== false && $strong) {
+				return bin2hex($bytes);
+			}
+		}
+
+		return wp_hash(uniqid('', true) . wp_rand() . microtime(true));
+	}
+}
+}
+
+?>
