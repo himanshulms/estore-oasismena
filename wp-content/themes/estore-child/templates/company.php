@@ -125,30 +125,20 @@ $paragraphs = array_values( array_filter( array_map( 'trim', preg_split( '/\R{2,
 </section>
 <?php endif; ?>
 
-<?php /* --- Management: pull quote, then the shared grid --- */ ?>
-<?php if ( $g( 'management_quote' ) ) : ?>
-<section class="pt-4">
-	<div class="shell">
-		<figure class="max-w-[900px] mx-auto text-center" data-aos="fade-up">
-			<blockquote class="lede text-base lg:text-lg leading-relaxed">
-				<?php echo esc_html( $g( 'management_quote' ) ); ?>
-			</blockquote>
-			<?php if ( $g( 'management_quote_by' ) ) : ?>
-				<figcaption class="eyebrow-text mt-5 text-white"><?php echo esc_html( $g( 'management_quote_by' ) ); ?></figcaption>
-			<?php endif; ?>
-		</figure>
-	</div>
-</section>
-<?php endif; ?>
-
 <?php
+/* The quote belongs under the MANAGEMENT heading, so the shared part renders
+   it between the heading and the grid rather than this template placing it
+   above. Home and About pass no quote and are unaffected. */
 get_template_part(
 	'template-parts/management',
 	null,
 	array(
-		'post_id' => $company,
-		'eyebrow' => '',
-		'heading' => $g( 'management_heading' ),
+		'post_id'    => $company,
+		'eyebrow'    => '',
+		'heading'    => $g( 'management_heading' ),
+		'quote'      => $g( 'management_quote' ),
+		'quote_by'   => $g( 'management_quote_by' ),
+		'quote_role' => $g( 'management_quote_role' ),
 	)
 );
 ?>

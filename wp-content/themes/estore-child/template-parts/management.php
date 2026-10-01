@@ -12,6 +12,8 @@
  * $args['eyebrow'] / $args['heading'] override that lookup, for a page whose
  * CFS group has no team_eyebrow/team_heading of its own; passing an empty
  * string for either omits it.
+ * $args['quote'] / $args['quote_by'] / $args['quote_role'] render a pull quote
+ * between the heading and the grid - the Company page uses it.
  *
  * Figma 215:6775: a 2x2 grid with hairline dividers over a 520px lime wash;
  * portraits masked to a 200px circle on a grey gradient.
@@ -44,6 +46,23 @@ $show_eyebrow = ! array_key_exists( 'eyebrow', (array) $args ) || '' !== $eyebro
 			<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $eyebrow ?: __( 'Our Team', 'estore-child' ) ); ?></p>
 		<?php endif; ?>
 		<h2 class="display uppercase"><?php echo esc_html( $heading ?: __( 'Management', 'estore-child' ) ); ?></h2>
+
+		<?php $quote = trim( (string) ( $args['quote'] ?? '' ) ); ?>
+		<?php if ( $quote ) : ?>
+			<figure class="max-w-[900px] mx-auto mt-6" data-aos="fade-up">
+				<blockquote class="lede text-base lg:text-lg leading-relaxed">
+					<?php echo esc_html( $quote ); ?>
+				</blockquote>
+				<?php if ( ! empty( $args['quote_by'] ) ) : ?>
+					<figcaption class="mt-5">
+						<span class="eyebrow-text text-white"><?php echo esc_html( $args['quote_by'] ); ?></span>
+						<?php if ( ! empty( $args['quote_role'] ) ) : ?>
+							<span class="block text-xs text-muted mt-1.5"><?php echo esc_html( $args['quote_role'] ); ?></span>
+						<?php endif; ?>
+					</figcaption>
+				<?php endif; ?>
+			</figure>
+		<?php endif; ?>
 
 		<div class="relative mt-12">
 			<span class="glow glow--team left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></span>
