@@ -74,7 +74,13 @@ $show_eyebrow = ! array_key_exists( 'eyebrow', (array) $args ) || '' !== $eyebro
 					$focus = function_exists( 'cfs' ) ? trim( (string) cfs()->get( 'member_focus', $member->ID ) ) : '';
 					$photo = get_the_post_thumbnail_url( $member->ID, 'medium_large' );
 					?>
-					<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php echo $i > 1 ? 'border-t' : ''; ?>"
+					<div class="flex items-center gap-8 py-10 min-h-[260px] border-white/10 <?php echo $i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'; ?> <?php
+						// One column on mobile, so every member after the first
+						// needs a rule above it; the two-column grid only wants
+						// one above its second row.
+						echo $i > 0 ? 'border-t ' : '';
+						echo $i > 1 ? 'md:border-t' : 'md:border-t-0';
+						?>"
 						data-aos="fade-up" data-aos-delay="<?php echo esc_attr( ( $i % 2 ) * 80 ); ?>">
 
 						<?php if ( $photo ) : ?>
