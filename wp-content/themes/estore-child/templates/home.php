@@ -198,56 +198,10 @@ $shop = get_page_by_path( 'products' );
 </section>
 <?php endif; ?>
 
-<?php /* --- Who we are: vision / mission / values --- */ ?>
-<?php $pillars = (array) $get( 'pillars' ); ?>
-<?php if ( $get( 'about_heading' ) || $pillars ) : ?>
-<section class="py-14 lg:py-[60px]">
-	<div class="shell">
-		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-			<div class="lg:col-span-7">
-				<p class="eyebrow-text mb-[10px]"><?php echo esc_html( $get( 'about_eyebrow' ) ?: __( 'Who We Are', 'estore-child' ) ); ?></p>
-				<h2 class="display uppercase"><?php echo wp_kses_post( $get( 'about_heading' ) ); ?></h2>
-			</div>
-			<?php if ( $get( 'about_description' ) ) : ?>
-				<div class="lg:col-span-4 lg:col-start-9">
-					<p class="text-sm text-muted leading-relaxed"><?php echo esc_html( $get( 'about_description' ) ); ?></p>
-				</div>
-			<?php endif; ?>
-		</div>
-
-		<?php if ( $pillars ) : ?>
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 mt-10 pt-10 border-t border-white/10">
-				<?php foreach ( $pillars as $i => $pillar ) : ?>
-					<div data-aos="fade-up" data-aos-delay="<?php echo esc_attr( $i * 80 ); ?>">
-						<div class="flex items-center justify-between gap-4">
-							<span class="pillar-icon">
-								<?php if ( ! empty( $pillar['pillar_icon'] ) ) : ?>
-									<img src="<?php echo esc_url( estore_image_url( $pillar['pillar_icon'] ) ); ?>" alt="" class="w-[22px] h-[22px]" aria-hidden="true">
-								<?php else : ?>
-									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-										<?php if ( 0 === $i ) : ?>
-											<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" /><circle cx="12" cy="12" r="2.5" />
-										<?php elseif ( 1 === $i ) : ?>
-											<circle cx="12" cy="12" r="8.5" /><path stroke-linecap="round" d="M12 7.5V12l3 2" />
-										<?php else : ?>
-											<path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3z" />
-										<?php endif; ?>
-									</svg>
-								<?php endif; ?>
-							</span>
-							<span class="ghost-number" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
-						</div>
-						<h3 class="text-xl font-bold leading-8 mt-6 mb-2.5"><?php echo esc_html( $pillar['pillar_title'] ?? '' ); ?></h3>
-						<p class="lede"><?php echo esc_html( $pillar['pillar_text'] ?? '' ); ?></p>
-					</div>
-				<?php endforeach; ?>
-			</div>
-		<?php endif; ?>
-	</div>
-</section>
-<?php endif; ?>
-
-<?php /* --- Management: shared with the About page --- */ ?>
-<?php get_template_part( 'template-parts/management', null, array( 'post_id' => get_the_ID() ) ); ?>
+<?php /* The vision/mission/values tiles and the Management grid were removed
+         from the home page at the client's request - both live on the Company
+         page (Our Foundation, Management) and Management is also on About.
+         Their CFS fields are untouched, so restoring either band is a matter
+         of putting its markup back, not re-entering content. */ ?>
 
 <?php get_footer(); ?>

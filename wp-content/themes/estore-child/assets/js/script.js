@@ -16,6 +16,7 @@
         initGallery();
         initQuoteModal();
         initCategoryDropdown();
+        initNavDropdowns();
         initAOS();
     });
 
@@ -333,6 +334,49 @@
         select.setAttribute('tabindex', '-1');
         select.setAttribute('aria-hidden', 'true');
         label();
+    }
+
+    /* Main-menu dropdowns. The caret toggles its panel; the item's own link
+       still navigates. Mirrors initCategoryDropdown's behaviour so the two
+       controls feel the same. */
+    function initNavDropdowns() {
+        var carets = document.querySelectorAll('.nav-caret');
+        if (!carets.length) return;
+
+        function panelFor(caret) {
+            return caret.parentElement.querySelector('.nav-dropdown');
+        }
+
+        function close(caret) {
+            var panel = panelFor(caret);
+            if (panel) panel.hidden = true;
+            caret.setAttribute('aria-expanded', 'false');
+        }
+
+        function closeAll(except) {
+            carets.forEach(function (c) { if (c !== except) close(c); });
+        }
+
+        carets.forEach(function (caret) {
+            caret.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var panel = panelFor(caret);
+                if (!panel) return;
+                var open = panel.hidden;
+                closeAll(caret);
+                panel.hidden = !open;
+                caret.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.nav-item--has-children')) closeAll();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeAll();
+        });
     }
 
     function initAOS() {
